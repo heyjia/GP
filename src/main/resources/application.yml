@@ -1,0 +1,36 @@
+server:
+  port: 8080
+#thymleaf
+spring:
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+    encoding: utf-8
+    mode: HTML5
+    enabled: true
+    servlet:
+      content-type: text/html
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/pms?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.heihei.bookrecommendsystem.entity
+
+redis:
+  host: 129.204.166.67
+  port: 6397
+  timeout: 3
+  password: 123456
+  poolMaxTotal: 10
+  poolMaxIdle: 10
+  poolMaxWait: 3
+

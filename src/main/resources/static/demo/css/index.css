@@ -1,0 +1,266 @@
+/* 覆盖部分bootstrap样式 */
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.dh {
+    height: 100%;
+}
+
+.bdr-n {
+    border-radius: 0px !important;
+    margin-bottom: 0px !important;
+    background-color: #324157;
+}
+
+.dropdown-toggle:focus {
+    background-color: #324157 !important;
+}
+
+.z-ind {
+    z-index: 100;
+}
+
+.mainbox {
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    padding-top: 50px;
+    box-sizing: border-box;
+}
+
+.navleft {
+    width: 250px;
+    position: absolute;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.main-rightbox {
+    box-sizing: border-box;
+    padding-left: 250px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+.mainrightbox {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
+
+
+/* 左边菜单样式文件 */
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Microsoft YaHei", Arial, sans-serif;
+    font-size: 14px;
+}
+
+.list_dt {
+    background: #324157;
+    color: #bfcbd9;
+    width: 250px;
+    padding: 0 40px 0 20px;
+    height: 45px;
+    line-height: 45px;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    position: relative;
+}
+
+.list_dt:hover {
+    background: #4E5366;
+}
+
+.list_dt:hover ._after {
+    display: block;
+    width: 3px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #4285F4;
+}
+
+#open {
+    background: #324157;
+}
+
+#open ._after {
+    display: block;
+    width: 3px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: #4285F4;
+}
+
+.list_dt_icon {
+    position: absolute;
+    right: 10px;
+    top: 17px;
+    display: block;
+    width: 12px;
+    height: 12px;
+    background: url("../images/off.png") no-repeat;
+    background-size: cover;
+}
+
+#open .list_dt_icon {
+    background: url("../images/open.png") no-repeat;
+    background-size: cover;
+}
+
+.list_dd {
+    display: none;
+}
+
+.list_dd>ul {
+    margin-bottom: 0px !important;
+}
+
+.list_li {
+    background: #1F2D3D;
+    list-style-type: none;
+    color: #bfcbd9;
+    width: 250px;
+    padding: 0 30px;
+    height: 45px;
+    line-height: 45px;
+    cursor: pointer;
+}
+
+.list_li:hover {
+    background: #475669;
+}
+
+.list_a {
+    color: #bfcbd9;
+    cursor: pointer;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+}
+
+.list_a:hover {
+    text-decoration: none;
+    color: white;
+}
+
+
+/* 菜单样式结束 */
+
+
+/* 页面主体部分 */
+
+.main-rightbox ol {
+    margin-bottom: 0px !important;
+}
+
+.main_box {
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.maintab {
+    margin-top: 20px;
+}
+
+.modal-bg {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    box-sizing: border-box;
+    padding-top: 10%;
+}
+
+.modal-conbox {
+    width: 400px;
+    margin: 0 auto;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.modal-t {
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    background-color: #F8F8F8;
+    padding: 0 20px;
+}
+
+.modal-conbox>form {
+    box-sizing: border-box;
+    padding: 30px;
+}
+
+.modalback {
+    float: right;
+    cursor: pointer;
+    width: 20px;
+    padding-top: 10px;
+}
+
+.dp-n {
+    display: none;
+}
+
+.cp {
+    cursor: pointer;
+}
+
+.showm {
+    animation: pop-window 0.5s;
+}
+
+@keyframes pop-window {
+    0% {
+        transform: scale(0, 0);
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+
+.modaldet {
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+.ban-m {
+    margin-top: 10px;
+    height: 80px;
+}
+
+.ban-m .rows {
+    height: 80px;
+    box-sizing: border-box;
+    padding-top: 15px;
+}
+
+.ioep {
+    box-sizing: border-box;
+    padding-top: 5%;
+}
+
+.deletebgc {
+    background-color: #FF3D40;
+}

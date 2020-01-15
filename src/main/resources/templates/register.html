@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>注册</title>
+
+    <script type = "text/javascript" th:src="@{/jquery/2.1.1/jquery.min.js}"></script>
+    <script type = "text/javascript" th:src="@{/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/js/bootstrapValidator.js}"></script>
+    <script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 登录面板 -->
+        <div class="panel panel-default">
+            <!-- 面板头 -->
+            <div class="panel-heading">
+                <h1>EMAN</h1>
+            </div>
+            <!-- 面板体 -->
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <div style="float: left;">
+                            <img width="500px" th:src="@{/img/kindle.jpg}" />
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div style="padding: 50px 100px 10px;">
+                            <span><h3>用户注册</h3></span>
+                            <form id = "loginForm" name = "loginForm" class="bs-example bs-example-form" role="form"
+                                  method="post">
+                                <div class = "form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label">用户名</label>
+                                        <div class="col-sm-7">
+                                        <input id = "userName" name = "userName" type="text" class="form-control" placeholder="用户名"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class = "form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label">邮箱</label>
+                                        <div class="col-sm-7">
+                                            <input id = "mail" name = "mail" type="text" class="form-control" placeholder="邮箱"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class = "form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label">验证码</label>
+                                        <div class="col-sm-7">
+                                            <div class="input-group">
+                                            <input id = "checkCode" name = "checkCode" type="text" class="form-control" placeholder="验证码"/>
+                                            <div class="input-group-btn">
+                                                <input type="button" class="btn btn-info" id="getCheckCode" onclick="getCheckCode()" value="获取验证码"/>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class = "form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label">设置密码</label>
+                                        <div class="col-sm-7">
+                                            <input id = "fpassword" name = "fpassword" type="text" class="form-control" placeholder="设置密码"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class = "form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label">确认密码</label>
+                                        <div class="col-sm-7">
+                                            <input id = "spassword" name = "spassword" type="text" class="form-control" placeholder="确认密码"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class = "form-group">
+                                    <div style="text-align:center">
+                                        <button type="button" class="btn btn-info" id="registerBtn">确认信息并注册</button>
+                                        <button type="button" class="btn btn-info" id="resetBtn">重置</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(function(){
+        $("#loginForm").bootstrapValidator({
+            live: 'enabled',
+            excluded: [':disabled','hidden',':not(:visible)'],
+            submitButtons: '#loginBtn',
+            message: '通用的验证失败消息',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                userName: {
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                        stringLength: {
+                            max: 16,
+                            message: '用户名长度不能超过16位'
+                        }
+                    }
+                },
+                userPassword: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        stringLength: {
+                            max: 16,
+                            message: '密码长度不能超过16位'
+                        }
+                    }
+                }
+            }
+        });
+        $("#loginBtn").click(function() { //非submit按钮点击后进行验证，如果是submit则无需此句直接验证
+            $("#loginForm").bootstrapValidator('validate'); //提交验证
+            if ($("#loginForm").data('bootstrapValidator').isValid()) { //获取验证结果，如果成功，执行下面代码
+
+            }
+        });
+    });
+</script>
+</html>

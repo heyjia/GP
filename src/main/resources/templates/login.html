@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>登录</title>
+
+    <script type = "text/javascript" th:src="@{/jquery/2.1.1/jquery.min.js}"></script>
+    <script type = "text/javascript" th:src="@{/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/js/bootstrapValidator.js}"></script>
+    <script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 登录面板 -->
+        <div class="panel panel-default">
+            <!-- 面板头 -->
+            <div class="panel-heading">
+                <h1>EMAN</h1>
+            </div>
+            <!-- 面板体 -->
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div style="float: left;">
+                            <img width="500px" th:src="@{/img/kindle.jpg}" />
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div style="padding: 100px 100px 10px;">
+                            <span><h3>用户登录</h3></span>
+                            <form id = "loginForm" name = "loginForm" class="bs-example bs-example-form" role="form"
+                                  method="post">
+                                <div class = "form-group">
+                                    <input id = "userName" name = "userName" type="text" class="form-control" placeholder="用户名"/>
+                                </div>
+                                <br>
+                                <div class = "form-group">
+                                    <input id = "userPassword" name = "userPassword" type="text" class="form-control" placeholder="密码"/>
+                                </div>
+                                <br>
+                                <div class = "form-group">
+                                    <div style="text-align:center">
+                                        <input id = "loginBtn" name = "loginBtn"  type="button" class="btn btn-info"
+                                               value="登录" />
+                                        <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                        <button type="button" class="btn btn-info" id="registerBtn" onclick="toRegister()">注册</button>
+                                    </div>
+                                </div>
+<!--                                <input id = "loginBtn" name = "loginBtn"  type="button" class="btn btn-info"-->
+<!--                                            value="登录" />-->
+<!--                                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
+<!--                                <button type="button" class="btn btn-info" id="registerBtn" onclick="toRegister()">注册</button>-->
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    function toRegister(){
+        window.location.href = "/login/toRegister";
+    }
+    $(function(){
+        $("#loginForm").bootstrapValidator({
+            live: 'enabled',
+            excluded: [':disabled','hidden',':not(:visible)'],
+            submitButtons: '#loginBtn',
+            message: '通用的验证失败消息',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                userName: {
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                        stringLength: {
+                            max: 16,
+                            message: '用户名长度不能超过16位'
+                        }
+                    }
+                },
+                userPassword: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        stringLength: {
+                            max: 16,
+                            message: '密码长度不能超过16位'
+                        }
+                    }
+                }
+            }
+        });
+        $("#loginBtn").click(function() { //非submit按钮点击后进行验证，如果是submit则无需此句直接验证
+            $("#loginForm").bootstrapValidator('validate'); //提交验证
+            if ($("#loginForm").data('bootstrapValidator').isValid()) { //获取验证结果，如果成功，执行下面代码
+
+            }
+        });
+    });
+</script>
+</html>
