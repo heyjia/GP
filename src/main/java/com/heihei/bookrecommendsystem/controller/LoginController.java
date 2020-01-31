@@ -1,11 +1,50 @@
 package com.heihei.bookrecommendsystem.controller;
 
+import com.heihei.bookrecommendsystem.entity.EmailDO;
+import com.heihei.bookrecommendsystem.entity.UserDO;
+import com.heihei.bookrecommendsystem.entity.form.EmailForm;
+import com.heihei.bookrecommendsystem.entity.form.UserForm;
+import com.heihei.bookrecommendsystem.result.CodeMsg;
+import com.heihei.bookrecommendsystem.result.Result;
+import com.heihei.bookrecommendsystem.service.EmailService;
+import com.heihei.bookrecommendsystem.service.UserService;
+import com.heihei.bookrecommendsystem.util.EmailUtil;
+import com.heihei.bookrecommendsystem.util.RSAUtil;
+import com.heihei.bookrecommendsystem.util.UserCookieUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Controller
 @RequestMapping(value = "/login")
 public class LoginController {
+    private static long  GET_CODE_TIME_OUT = 300000;
+    private static long  CODE_TIME_OUT = 1800000;
+    Logger logger = LoggerFactory.getLogger(LoginController.class);
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    UserCookieUtil userCookieUtil;
+
+    @Autowired
+    EmailService emailService;
     //前往登录页面
     @RequestMapping(value = "/toLogin")
     public String toLogin() {
@@ -16,5 +55,114 @@ public class LoginController {
     @RequestMapping(value = "/toRegister")
     public String toRegister() {
         return "register";
+    }
+
+    // 拦截用户登录请求，用shiro进行认证，判断用户是否存在以及用户密码是否正确
+    @RequestMapping(value = "/doLogin")
+    @ResponseBody
+    public Result<Boolean> doLogin(HttpServletRequest request, HttpServletResponse response, @RequestParam(name = "userName") String userName, @RequestParam(name = "password") String password){
+        logger.info("进入doLogin");
+        logger.info(RSAUtil.PRIVATE_KEY);
+
+        password = RSAUtil.decrypt(password,RSAUtil.PRIVATE_KEY);
+        logger.info("表单密码解密后的结果：" + password);
+        UsernamePasswordToken token = new UsernamePasswordToken(userName,password);    //将用户名包装成一个token
+        Subject subject = SecurityUtils.getSubject();
+        try {
+            subject.login(token);                                                     //执行登录请求，会被shiro过滤器拦截，对用户信息进行认证
+        }catch (IncorrectCredentialsException ice){
+            return  Result.error(CodeMsg.PASSWORD_ERROR);
+        }catch (UnknownAccountException uae){
+            return  Result.error(CodeMsg.UNKNOWACCOUNT);
+        }catch (Exception e) {
+            //其他错误登录异常
+            return Result.error(new CodeMsg(10003,e.getMessage()));
+        }
+        if (subject.isAuthenticated()) {
+//            UserDO user = userService.getOneUserByUserName(userName);
+//            userCookieUtil.addCookie(response,user,"");
+//            String ip = IPUtil.getIP(request);
+//            logger.info("IP:" + ip);
+//            redisService.set(IPKeyPerfix.ipKeyPerfix,user.getName(),ip);
+//            String outIp = redisService.get(IPKeyPerfix.ipKeyPerfix,user.getName(),String.class);
+//            logger.info("redis IP ： " + outIp);
+            logger.info("登录成功");
+        }
+        return Result.success(true);
+    }
+
+    // 前往首页
+    @RequestMapping("/toIndex")
+    public String toIndex(Model model, UserDO userDO){
+        logger.info("首页user：" + userDO.toString());
+        model.addAttribute("u",userDO);
+        logger.info("toLogin方法：前往首页");
+        return "demo/index";
+    }
+
+    //注册
+
+    @RequestMapping(value = "/register")
+    @ResponseBody
+    public Result<Boolean> register(UserForm userForm) {
+        String name = userForm.getUserName();
+        UserDO user = userService.getOneUserByUserName(name);
+        if (user != null) {
+            return Result.error(CodeMsg.USER_EXISTED);
+        }
+        user = userService.getOneUserByEmail(userForm.getEmail());
+        if (user != null) {
+            return Result.error(CodeMsg.EMAIL_EXISTED);
+        }
+        EmailDO emailDO = emailService.getEmailByAddress(userForm.getEmail(),userForm.getUserName());
+        if (emailDO == null) {
+            return Result.error(CodeMsg.WITHOUT_CHECK_CODE);
+        }else{
+            Date now = new Date();
+            Date lastUpdtTime = emailDO.getUpdtTime();
+            long diff = now.getTime() - lastUpdtTime.getTime();
+            if (diff > CODE_TIME_OUT) {
+                return Result.error(CodeMsg.CHECK_CODE_TIME_OUT);
+            }
+            if (!emailDO.getCode().equals(userForm.getCheckCode())) {
+                return Result.error(CodeMsg.CHECK_CODE_ERROR);
+            }
+        }
+        boolean result = userService.addUserByForm(userForm);
+        if (result == false) {
+            Result.error(CodeMsg.REGISTER_ERROR);
+        }
+        return Result.success(true);
+    }
+
+    //发送邮件
+    @ResponseBody
+    @RequestMapping(value = "email")
+    public Result<Boolean>  getEmail(EmailForm emailForm) {
+        int random = (int)((Math.random() * 9 + 1) * 100000);
+        String code = random + "";
+        logger.info("随机生成的验证码为："+ code);
+        EmailDO emailDO = emailService.getEmailByAddress(emailForm.getEmail(),emailForm.getUserName());
+        if (emailDO != null) {
+            Date now = new Date();
+            Date lastUpdtTime = emailDO.getUpdtTime();
+            long diff = now.getTime() - lastUpdtTime.getTime();//这样得到的差值是微秒级别
+            logger.info("时间差diff: " + diff);
+            if (diff < GET_CODE_TIME_OUT){
+                return Result.error(CodeMsg.EMAIL_TOO_FAST);
+            }else{
+                emailDO.setUpdtTime(new Date());
+                emailDO.setCode(code);
+                emailService.updateOne(emailDO);
+            }
+        }else{
+            emailService.insertCode(emailForm.getUserName(),emailForm.getEmail(),code);
+        }
+        try{
+            EmailUtil.sendCheckCode(emailForm.getEmail(),code);
+        }catch (Exception e) {
+            Result.error(CodeMsg.SEND_EMAIL_ERROR);
+        }
+        return Result.success(true);
     }
 }

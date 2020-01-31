@@ -11,6 +11,8 @@
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/3.3.7/css/bootstrap.min.css}"/>
     <script type="text/javascript" th:src="@{/js/bootstrapValidator.js}"></script>
     <script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jsencrypt.min.js}"></script>
 </head>
 
 <body>
@@ -66,6 +68,7 @@
     function toRegister(){
         window.location.href = "/login/toRegister";
     }
+
     $(function(){
         $("#loginForm").bootstrapValidator({
             live: 'enabled',
@@ -105,7 +108,26 @@
         $("#loginBtn").click(function() { //非submit按钮点击后进行验证，如果是submit则无需此句直接验证
             $("#loginForm").bootstrapValidator('validate'); //提交验证
             if ($("#loginForm").data('bootstrapValidator').isValid()) { //获取验证结果，如果成功，执行下面代码
-
+                var userName = $("#userName").val();
+                var password = $("#userPassword").val();
+                password = encryptPwd(password);
+                $.ajax({
+                    url:"/login/doLogin",
+                    type:"POST",
+                    data:{
+                        userName:userName,
+                        password:password
+                    },
+                    success:function (data) {
+                        if (data.code == 0) {
+                            layer.msg("登录成功");
+                            location.href="/login/toIndex";
+                        }
+                    },
+                    error:function () {
+                        layer.msg("登陆失败,客户端请求有误");
+                    }
+                });
             }
         });
     });
