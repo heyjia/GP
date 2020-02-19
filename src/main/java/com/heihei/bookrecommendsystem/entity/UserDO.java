@@ -11,6 +11,7 @@ public class UserDO {
     private String name;
     private String password;
     private int sex;
+    private int age;
     private String email;
     private Date birthday;
     private String address;
@@ -20,11 +21,12 @@ public class UserDO {
     public UserDO() {
     }
 
-    public UserDO(int id, String name, String password, int sex, String email, Date birthday, String address, Date crtTime, Date updtTime) {
+    public UserDO(int id, String name, String password, int sex, int age, String email, Date birthday, String address, Date crtTime, Date updtTime) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.sex = sex;
+        this.age = age;
         this.email = email;
         this.birthday = birthday;
         this.address = address;
@@ -104,6 +106,14 @@ public class UserDO {
         this.updtTime = updtTime;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     @Override
     public String toString() {
         return "UserDO{" +
@@ -111,6 +121,7 @@ public class UserDO {
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", sex=" + sex +
+                ", age=" + age +
                 ", email='" + email + '\'' +
                 ", birthday=" + birthday +
                 ", address='" + address + '\'' +
