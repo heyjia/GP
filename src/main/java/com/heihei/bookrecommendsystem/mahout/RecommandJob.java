@@ -21,8 +21,8 @@ import java.util.*;
 public class RecommandJob {
     public static void timerJob() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR,2);
-        calendar.set(Calendar.MINUTE,41);
+        calendar.set(Calendar.HOUR,11);
+        calendar.set(Calendar.MINUTE,34);
         calendar.set(Calendar.SECOND,0);
         Date time = calendar.getTime();
         Timer timer = new Timer();
