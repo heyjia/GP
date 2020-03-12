@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script type = "text/javascript" th:src="@{/static/jquery/2.1.1/jquery.min.js}"></script>
+    <script type = "text/javascript" th:src="@{/static/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/static/js/bootstrapValidator.js}"></script>
+    <script type="text/javascript" th:src="@{/static/layer/layer.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jsencrypt.min.js}"></script>
+</head>
+<!-- 导航栏 -->
+<div class="row" th:fragment = "nav">
+<div class="row clearfix">
+    <div class="col-md-12 column">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="http://localhost:8080/login/toIndex"><span
+                        class="glyphicon glyphicon-home"></span> EMAN</a>
+            </div>
+            <div class="collapse navbar-collapse"
+                 id="bs-example-navbar-collapse-1">
+                <form class="navbar-form navbar-left" role="search">
+                    <div class="form-group">
+                        <input type="text" id="keyword" class="form-control"
+                               placeholder="图书搜索"></input>
+                    </div>
+                    <button id="bt-navbar-form-search"
+                            class="btn btn-default">搜索</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right" id="user-nav">
+                    <li>
+                        <a id = "userName" name = "userName" th:text="${u.name}"/></a>
+                    </li>
+                    <li><a href="http://localhost:8080/person/toCenter">个人中心</a></li>
+                    <li>
+                        <a href="http://localhost:8080/login/toLogout">注销</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+</div>
+</html>

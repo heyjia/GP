@@ -28,7 +28,7 @@ mybatis:
 
 redis:
   host: 129.204.166.67
-  port: 6397
+  port: 6379
   timeout: 3
   password: 123456
   poolMaxTotal: 10

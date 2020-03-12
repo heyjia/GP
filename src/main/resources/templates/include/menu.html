@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script type = "text/javascript" th:src="@{/static/jquery/2.1.1/jquery.min.js}"></script>
+    <script type = "text/javascript" th:src="@{/static/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/static/js/bootstrapValidator.js}"></script>
+    <script type="text/javascript" th:src="@{/static/layer/layer.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jsencrypt.min.js}"></script>
+</head>
+<!-- 导航栏 -->
+<div th:fragment = "menu">
+    <div class="col-lg-2">
+        <h4 class="text-center">分类</h4>
+        <ul class="nav" th:each="c : ${class}">
+            <li th:value="${c.id}"><a th:text = "${c.name}" style="list-style-type:none"></a></li>
+        </ul>
+    </div>
+</div>
+</html>

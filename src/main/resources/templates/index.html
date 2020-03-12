@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>首页</title>
+    <script type = "text/javascript" th:src="@{/jquery/2.1.1/jquery.min.js}"></script>
+    <script type = "text/javascript" th:src="@{/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/js/bootstrapValidator.js}"></script>
+    <script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jsencrypt.min.js}"></script>
+</head>
+
+<body>
+<div th:include="include/head::nav">
+</div>
+<div th:include="include/menu::menu">
+</div>
+</body>
+
+
+</html>

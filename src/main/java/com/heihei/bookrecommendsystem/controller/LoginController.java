@@ -1,11 +1,13 @@
 package com.heihei.bookrecommendsystem.controller;
 
+import com.heihei.bookrecommendsystem.entity.BookClassDO;
 import com.heihei.bookrecommendsystem.entity.EmailDO;
 import com.heihei.bookrecommendsystem.entity.UserDO;
 import com.heihei.bookrecommendsystem.entity.form.EmailForm;
 import com.heihei.bookrecommendsystem.entity.form.UserForm;
 import com.heihei.bookrecommendsystem.result.CodeMsg;
 import com.heihei.bookrecommendsystem.result.Result;
+import com.heihei.bookrecommendsystem.service.BookService;
 import com.heihei.bookrecommendsystem.service.EmailService;
 import com.heihei.bookrecommendsystem.service.UserService;
 import com.heihei.bookrecommendsystem.util.EmailUtil;
@@ -29,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/login")
@@ -45,6 +48,9 @@ public class LoginController {
 
     @Autowired
     EmailService emailService;
+
+    @Autowired
+    BookService bookService;
     //前往登录页面
     @RequestMapping(value = "/toLogin")
     public String toLogin() {
@@ -63,7 +69,6 @@ public class LoginController {
     public Result<Boolean> doLogin(HttpServletRequest request, HttpServletResponse response, @RequestParam(name = "userName") String userName, @RequestParam(name = "password") String password){
         logger.info("进入doLogin");
         logger.info(RSAUtil.PRIVATE_KEY);
-
         password = RSAUtil.decrypt(password,RSAUtil.PRIVATE_KEY);
         logger.info("表单密码解密后的结果：" + password);
         UsernamePasswordToken token = new UsernamePasswordToken(userName,password);    //将用户名包装成一个token
@@ -79,13 +84,8 @@ public class LoginController {
             return Result.error(new CodeMsg(10003,e.getMessage()));
         }
         if (subject.isAuthenticated()) {
-//            UserDO user = userService.getOneUserByUserName(userName);
-//            userCookieUtil.addCookie(response,user,"");
-//            String ip = IPUtil.getIP(request);
-//            logger.info("IP:" + ip);
-//            redisService.set(IPKeyPerfix.ipKeyPerfix,user.getName(),ip);
-//            String outIp = redisService.get(IPKeyPerfix.ipKeyPerfix,user.getName(),String.class);
-//            logger.info("redis IP ： " + outIp);
+            UserDO user = userService.getOneUserByUserName(userName);
+            userCookieUtil.addCookie(response,user,"");
             logger.info("登录成功");
         }
         return Result.success(true);
@@ -95,9 +95,15 @@ public class LoginController {
     @RequestMapping("/toIndex")
     public String toIndex(Model model, UserDO userDO){
         logger.info("首页user：" + userDO.toString());
+        //查询所有的分类数
+        List<BookClassDO> allBookClass = bookService.getAllBookClass();
+        for (BookClassDO bookClass : allBookClass) {
+            System.out.println(bookClass.toString());
+        }
         model.addAttribute("u",userDO);
+        model.addAttribute("class",allBookClass);
         logger.info("toLogin方法：前往首页");
-        return "demo/index";
+        return "index";
     }
 
     //注册
@@ -164,5 +170,11 @@ public class LoginController {
             Result.error(CodeMsg.SEND_EMAIL_ERROR);
         }
         return Result.success(true);
+    }
+    @RequestMapping("/toLogout")
+    public String toLogout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return "login";
     }
 }

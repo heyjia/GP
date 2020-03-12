@@ -6,10 +6,12 @@ import com.heihei.bookrecommendsystem.service.PrivilegeService;
 import com.heihei.bookrecommendsystem.service.RoleService;
 import com.heihei.bookrecommendsystem.service.UserService;
 import com.heihei.bookrecommendsystem.util.RSAUtil;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,8 +86,8 @@ public class MyShiroRealm extends AuthorizingRealm {
         String password = RSAUtil.decrypt(userDO.getPassword(),RSAUtil.PRIVATE_KEY);
         logger.info("数据库密码解密的结果" + password);
         SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(inputUserName, password,getName());
-//        Session session = SecurityUtils.getSubject().getSession();
-//        session.setAttribute("userSession", userDO);
+        Session session = SecurityUtils.getSubject().getSession();
+        session.setAttribute("userSession", userDO);
         return simpleAuthenticationInfo;
     }
 }
