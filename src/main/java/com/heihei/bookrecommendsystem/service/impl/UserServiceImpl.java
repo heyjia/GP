@@ -23,6 +23,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean addUserByForm(UserForm userForm) {
         UserDO addUser = new UserDO();
+        addUser.setUserId(userForm.getUserId());
         addUser.setName(userForm.getUserName());
         addUser.setPassword(userForm.getPassword());
         addUser.setEmail(userForm.getEmail());
@@ -39,6 +40,13 @@ public class UserServiceImpl implements UserService {
     public UserDO getOneUserByEmail(String email) {
         UserDO query = new UserDO();
         query.setEmail(email);
+        return userMapper.selectOne(query);
+    }
+
+    @Override
+    public UserDO getOneUserByUserId(String userId) {
+        UserDO query = new UserDO();
+        query.setUserId(userId);
         return userMapper.selectOne(query);
     }
 }

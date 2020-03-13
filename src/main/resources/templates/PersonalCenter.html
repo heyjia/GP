@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>个人中心</title>
+    <script type = "text/javascript" th:src="@{/jquery/2.1.1/jquery.min.js}"></script>
+    <script type = "text/javascript" th:src="@{/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/js/bootstrapValidator.js}"></script>
+    <script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jsencrypt.min.js}"></script>
+</head>
+
+<body>
+<div class="container">
+    <div th:include="include/head::nav">
+    </div>
+    <div class = "row">
+        <div th:include="include/menu::menu"></div>
+        <div class = "col-md-2"></div>
+        <div class = "col-md-8">
+            <div class = "row">
+                <span class = "text-center col-md-8"><h4>基本信息</h4></span>
+            </div>
+            <div class = "row">
+                <div class = "col-md-1"></div>
+                <div class = "col-md-7">
+                    <form>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="control-label col-md-3">昵称 </label>
+                                <label class="form-label col-md-8" th:text = "${u.name}"></label>
+                                <input id="userName" name="userName" type="hidden" class="form-control"  th:value="${u.name}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="form-label col-md-3">密码 </label>
+                                <div class="col-md-8">
+                                    <button class="btn btn-block btn-info"  type="button" onclick="javascript:history.back(-1);">修改密码</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="form-label col-md-3">性别 </label>
+                                <div class="col-md-8">
+                                    <input id="man" name="userSex"  type = "radio" value = "0"/>男
+                                    <input id="woman" name="userSex" type = "radio" value = "1"/>女
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="form-label col-md-3">年龄 </label>
+                                <div class="col-md-8">
+                                    <input id="age" name="age" class="form-control"  th:value="${u.age}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="form-label col-md-3">生日 </label>
+                                <div class="col-md-8">
+                                    <input id="birthday" name="birthday" class="form-control"  placeholder="yyyy-MM-dd"  th:value="${#dates.format(u.birthday, 'yyyy-MM-dd')}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="form-label col-md-3">电子邮箱 </label>
+                                <div class="col-md-8">
+                                    <input id="email" name="email" class="form-control"  th:value="${u.email}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="form-label col-md-3">通讯地址 </label>
+                                <div class="col-md-8">
+                                    <input id="address" name="address" class="form-control"  th:value="${u.address}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-primary btn-block" type="button"  onclick= "updateUser()">确定修改</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-primary btn-block"  type="button" onclick="javascript:history.back(-1);">返回</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

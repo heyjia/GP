@@ -37,11 +37,11 @@
                             <form id = "loginForm" name = "loginForm" class="bs-example bs-example-form" role="form"
                                   method="post">
                                 <div class = "form-group">
-                                    <input id = "userName" name = "userName" type="text" class="form-control" placeholder="用户名"/>
+                                    <input id = "userId" name = "userId" type="text" class="form-control" placeholder="账号"/>
                                 </div>
                                 <br>
                                 <div class = "form-group">
-                                    <input id = "userPassword" name = "userPassword" type="text" class="form-control" placeholder="密码"/>
+                                    <input id = "userPassword" name = "userPassword" type="password" class="form-control" placeholder="密码"/>
                                 </div>
                                 <br>
                                 <div class = "form-group">
@@ -52,10 +52,6 @@
                                         <button type="button" class="btn btn-info" id="registerBtn" onclick="toRegister()">注册</button>
                                     </div>
                                 </div>
-<!--                                <input id = "loginBtn" name = "loginBtn"  type="button" class="btn btn-info"-->
-<!--                                            value="登录" />-->
-<!--                                <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>-->
-<!--                                <button type="button" class="btn btn-info" id="registerBtn" onclick="toRegister()">注册</button>-->
                             </form>
                         </div>
                     </div>
@@ -81,14 +77,14 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
-                userName: {
+                userId: {
                     validators: {
                         notEmpty: {
-                            message: '用户名不能为空'
+                            message: '用户账号不能为空'
                         },
                         stringLength: {
                             max: 16,
-                            message: '用户名长度不能超过16位'
+                            message: '用户账号长度不能超过16位'
                         }
                     }
                 },
@@ -108,20 +104,24 @@
         $("#loginBtn").click(function() { //非submit按钮点击后进行验证，如果是submit则无需此句直接验证
             $("#loginForm").bootstrapValidator('validate'); //提交验证
             if ($("#loginForm").data('bootstrapValidator').isValid()) { //获取验证结果，如果成功，执行下面代码
-                var userName = $("#userName").val();
+                var userId = $("#userId").val();
                 var password = $("#userPassword").val();
                 password = encryptPwd(password);
                 $.ajax({
                     url:"/login/doLogin",
                     type:"POST",
                     data:{
-                        userName:userName,
+                        userId:userId,
                         password:password
                     },
                     success:function (data) {
                         if (data.code == 0) {
                             layer.msg("登录成功");
                             location.href="/login/toIndex";
+                        }else{
+                            layer.alert(data.msg,function () {
+                                location.href="/login/toLogin";
+                            });
                         }
                     },
                     error:function () {

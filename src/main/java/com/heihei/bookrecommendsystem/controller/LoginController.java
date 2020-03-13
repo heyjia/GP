@@ -66,12 +66,12 @@ public class LoginController {
     // 拦截用户登录请求，用shiro进行认证，判断用户是否存在以及用户密码是否正确
     @RequestMapping(value = "/doLogin")
     @ResponseBody
-    public Result<Boolean> doLogin(HttpServletRequest request, HttpServletResponse response, @RequestParam(name = "userName") String userName, @RequestParam(name = "password") String password){
+    public Result<Boolean> doLogin(HttpServletRequest request, HttpServletResponse response, @RequestParam(name = "userId") String userId, @RequestParam(name = "password") String password){
         logger.info("进入doLogin");
         logger.info(RSAUtil.PRIVATE_KEY);
         password = RSAUtil.decrypt(password,RSAUtil.PRIVATE_KEY);
         logger.info("表单密码解密后的结果：" + password);
-        UsernamePasswordToken token = new UsernamePasswordToken(userName,password);    //将用户名包装成一个token
+        UsernamePasswordToken token = new UsernamePasswordToken(userId,password);    //将用户账号包装成一个token
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);                                                     //执行登录请求，会被shiro过滤器拦截，对用户信息进行认证
@@ -84,7 +84,7 @@ public class LoginController {
             return Result.error(new CodeMsg(10003,e.getMessage()));
         }
         if (subject.isAuthenticated()) {
-            UserDO user = userService.getOneUserByUserName(userName);
+            UserDO user = userService.getOneUserByUserId(userId);
             userCookieUtil.addCookie(response,user,"");
             logger.info("登录成功");
         }
@@ -111,8 +111,8 @@ public class LoginController {
     @RequestMapping(value = "/register")
     @ResponseBody
     public Result<Boolean> register(UserForm userForm) {
-        String name = userForm.getUserName();
-        UserDO user = userService.getOneUserByUserName(name);
+        String userId = userForm.getUserId();
+        UserDO user = userService.getOneUserByUserId(userId);
         if (user != null) {
             return Result.error(CodeMsg.USER_EXISTED);
         }
@@ -120,7 +120,7 @@ public class LoginController {
         if (user != null) {
             return Result.error(CodeMsg.EMAIL_EXISTED);
         }
-        EmailDO emailDO = emailService.getEmailByAddress(userForm.getEmail(),userForm.getUserName());
+        EmailDO emailDO = emailService.getEmailByAddress(userForm.getEmail(),userForm.getUserId());
         if (emailDO == null) {
             return Result.error(CodeMsg.WITHOUT_CHECK_CODE);
         }else{
@@ -148,7 +148,7 @@ public class LoginController {
         int random = (int)((Math.random() * 9 + 1) * 100000);
         String code = random + "";
         logger.info("随机生成的验证码为："+ code);
-        EmailDO emailDO = emailService.getEmailByAddress(emailForm.getEmail(),emailForm.getUserName());
+        EmailDO emailDO = emailService.getEmailByAddress(emailForm.getEmail(),emailForm.getUserId());
         if (emailDO != null) {
             Date now = new Date();
             Date lastUpdtTime = emailDO.getUpdtTime();
@@ -162,7 +162,7 @@ public class LoginController {
                 emailService.updateOne(emailDO);
             }
         }else{
-            emailService.insertCode(emailForm.getUserName(),emailForm.getEmail(),code);
+            emailService.insertCode(emailForm.getUserId(),emailForm.getEmail(),code);
         }
         try{
             EmailUtil.sendCheckCode(emailForm.getEmail(),code);

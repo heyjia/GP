@@ -8,6 +8,7 @@ import java.util.Date;
 public class UserDO {
     @Id
     private int id;
+    private String userId;
     private String name;
     private String password;
     private int sex;
@@ -20,20 +21,6 @@ public class UserDO {
 
     public UserDO() {
     }
-
-    public UserDO(int id, String name, String password, int sex, int age, String email, Date birthday, String address, Date crtTime, Date updtTime) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.sex = sex;
-        this.age = age;
-        this.email = email;
-        this.birthday = birthday;
-        this.address = address;
-        this.crtTime = crtTime;
-        this.updtTime = updtTime;
-    }
-
     public int getId() {
         return id;
     }
@@ -114,10 +101,33 @@ public class UserDO {
         this.age = age;
     }
 
+    public UserDO(int id, String userId, String name, String password, int sex, int age, String email, Date birthday, String address, Date crtTime, Date updtTime) {
+        this.id = id;
+        this.userId = userId;
+        this.name = name;
+        this.password = password;
+        this.sex = sex;
+        this.age = age;
+        this.email = email;
+        this.birthday = birthday;
+        this.address = address;
+        this.crtTime = crtTime;
+        this.updtTime = updtTime;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "UserDO{" +
                 "id=" + id +
+                ", userId='" + userId + '\'' +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
                 ", sex=" + sex +

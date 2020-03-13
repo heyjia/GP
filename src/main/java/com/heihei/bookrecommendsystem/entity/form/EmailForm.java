@@ -1,23 +1,23 @@
 package com.heihei.bookrecommendsystem.entity.form;
 
 public class EmailForm {
-    private String userName;
+    private String userId;
     private String email;
 
     public EmailForm() {
     }
 
-    public EmailForm(String userName, String email) {
-        this.userName = userName;
+    public EmailForm(String userId, String email) {
+        this.userId = userId;
         this.email = email;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getEmail() {
@@ -31,7 +31,7 @@ public class EmailForm {
     @Override
     public String toString() {
         return "EmailForm{" +
-                "userName='" + userName + '\'' +
+                "userId='" + userId + '\'' +
                 ", email='" + email + '\'' +
                 '}';
     }

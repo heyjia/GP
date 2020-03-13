@@ -13,21 +13,21 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     EmailMapper emailMapper;
     @Override
-    public int insertCode(String userName, String emailAddress, String code) {
+    public int insertCode(String userId, String emailAddress, String code) {
         EmailDO emailDO = new EmailDO();
         emailDO.setEmailAddress(emailAddress);
         emailDO.setCode(code);
-        emailDO.setUserName(userName);
+        emailDO.setUserId(userId);
         emailDO.setUpdtTime(new Date());
         emailMapper.insert(emailDO);
         return 1;
     }
 
     @Override
-    public EmailDO getEmailByAddress(String email,String userName) {
+    public EmailDO getEmailByAddress(String email,String userId) {
         EmailDO query = new EmailDO();
         query.setEmailAddress(email);
-        query.setUserName(userName);
+        query.setUserId(userId);
         return emailMapper.selectOne(query);
     }
 

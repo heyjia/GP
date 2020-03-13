@@ -1,6 +1,7 @@
 package com.heihei.bookrecommendsystem.entity.form;
 
 public class UserForm {
+    private String userId;
     private String userName;
     private String password;
     private String checkCode;
@@ -9,7 +10,8 @@ public class UserForm {
     public UserForm() {
     }
 
-    public UserForm(String userName, String password, String checkCode, String email) {
+    public UserForm(String userId, String userName, String password, String checkCode, String email) {
+        this.userId = userId;
         this.userName = userName;
         this.password = password;
         this.checkCode = checkCode;
@@ -48,10 +50,19 @@ public class UserForm {
         this.email = email;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "UserForm{" +
-                "userName='" + userName + '\'' +
+                "userId='" + userId + '\'' +
+                ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", checkCode='" + checkCode + '\'' +
                 ", email='" + email + '\'' +

@@ -8,7 +8,7 @@ import java.util.Date;
 public class EmailDO {
     @Id
     private Integer id;
-    private String userName;
+    private String userId;
     private String emailAddress;
     private String code;
     private Date UpdtTime;
@@ -16,9 +16,9 @@ public class EmailDO {
     public EmailDO() {
     }
 
-    public EmailDO(Integer id, String userName, String emailAddress, String code, Date updtTime) {
+    public EmailDO(Integer id, String userId, String emailAddress, String code, Date updtTime) {
         this.id = id;
-        this.userName = userName;
+        this.userId = userId;
         this.emailAddress = emailAddress;
         this.code = code;
         UpdtTime = updtTime;
@@ -32,12 +32,12 @@ public class EmailDO {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getEmailAddress() {
@@ -68,7 +68,7 @@ public class EmailDO {
     public String toString() {
         return "EmailDO{" +
                 "id=" + id +
-                ", userName='" + userName + '\'' +
+                ", userId='" + userId + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +
                 ", code='" + code + '\'' +
                 ", UpdtTime=" + UpdtTime +

@@ -32,15 +32,25 @@
                         </div>
                     </div>
                     <div class="col-md-7">
-                        <div style="padding: 50px 100px 10px;">
-                            <span><h3>用户注册</h3></span>
+                        <div style="padding: 30px 100px 10px;">
+                            <span class="text-center"><h3>用户注册</h3></span>
+                            <br>
                             <form id = "registerForm" name = "registerForm" class="bs-example bs-example-form" role="form"
                                   method="post">
                                 <div class = "form-group">
                                     <div class="row">
-                                        <label class="col-sm-3 control-label">用户名</label>
+                                        <label class="col-sm-3 control-label">账号名</label>
                                         <div class="col-sm-7">
-                                        <input id = "userName" name = "userName" type="text" class="form-control" placeholder="用户名"/>
+                                        <input id = "userId" name = "userId" type="text" class="form-control" placeholder="账号名"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class = "form-group">
+                                    <div class="row">
+                                        <label class="col-sm-3 control-label">昵称</label>
+                                        <div class="col-sm-7">
+                                            <input id = "userName" name = "userName" type="text" class="form-control" placeholder="昵称"/>
                                         </div>
                                     </div>
                                 </div>
@@ -109,13 +119,13 @@
         $("#getCheckCode").attr("disabled", false);
     }
     function getCode(){
-        var userName = $("#userName").val();
+        var userId = $("#userId").val();
         var email = $("#email").val();
         $.ajax({
             url:"/login/email",
             type:"POST",
             data:{
-                userName:userName,
+                userId:userId,
                 email:email
             },
             success:function (data) {
@@ -143,6 +153,17 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
+                userId: {
+                    validators: {
+                        notEmpty: {
+                            message: '账号不能为空'
+                        },
+                        stringLength: {
+                            max: 16,
+                            message: '账号长度不能超过16位'
+                        }
+                    }
+                },
                 userName: {
                     validators: {
                         notEmpty: {
@@ -207,6 +228,7 @@
         $("#registerBtn").click(function() { //非submit按钮点击后进行验证，如果是submit则无需此句直接验证
             $("#registerForm").bootstrapValidator('validate'); //提交验证
             if ($("#registerForm").data('bootstrapValidator').isValid()) { //获取验证结果，如果成功，执行下面代码
+                var userId = $("#userId").val();
                 var userName = $("#userName").val();
                 var email = $("#email").val();
                 var checkCode = $("#checkCode").val();
@@ -216,6 +238,7 @@
                     url:"/login/register",
                     type:"POST",
                     data:{
+                        userId:userId,
                         userName:userName,
                         email:email,
                         checkCode:checkCode,

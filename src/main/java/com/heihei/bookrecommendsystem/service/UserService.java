@@ -9,4 +9,6 @@ public interface UserService {
     boolean addUserByForm(UserForm userForm);
 
     UserDO getOneUserByEmail(String email);
+
+    UserDO getOneUserByUserId(String inputUserId);
 }

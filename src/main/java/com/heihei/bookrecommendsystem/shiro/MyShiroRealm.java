@@ -75,8 +75,8 @@ public class MyShiroRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         logger.info("进入doGetAuthenticationInfo 认证方法");
-        String inputUserName = (String) authenticationToken.getPrincipal();
-        UserDO userDO = userService.getOneUserByUserName(inputUserName);       //根据用户名查询用户，判断其是否存在
+        String inputUserId = (String) authenticationToken.getPrincipal();
+        UserDO userDO = userService.getOneUserByUserId(inputUserId);       //根据用户名查询用户，判断其是否存在
         if(userDO == null) {
             throw new UnknownAccountException("用户不存在");
         }else{
@@ -85,7 +85,7 @@ public class MyShiroRealm extends AuthorizingRealm {
         //判断密码是否正确，并且将用户放入session缓存
         String password = RSAUtil.decrypt(userDO.getPassword(),RSAUtil.PRIVATE_KEY);
         logger.info("数据库密码解密的结果" + password);
-        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(inputUserName, password,getName());
+        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(inputUserId, password,getName());
         Session session = SecurityUtils.getSubject().getSession();
         session.setAttribute("userSession", userDO);
         return simpleAuthenticationInfo;
