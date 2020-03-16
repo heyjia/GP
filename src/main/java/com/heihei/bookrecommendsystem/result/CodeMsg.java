@@ -25,6 +25,8 @@ public class CodeMsg {
     public static CodeMsg EMAIL_EXISTED = new CodeMsg(10012,"注册失败，邮箱已被注册");
     public static CodeMsg UPDATE_USER_ERROR = new CodeMsg(10013,"更新用户信息失败");
     public static CodeMsg USER_NAME_EXISTED = new CodeMsg(10014,"用户名已存在");
+    public static CodeMsg OLD_PASSWORD_ERROR = new CodeMsg(10015,"旧密码错误");
+    public static CodeMsg UPDATE_PASSWORD_ERROR =  new CodeMsg(10016,"修改密码错误，数据库异常");
     public CodeMsg(int code, String msg) {
         this.code = code;
         this.msg = msg;

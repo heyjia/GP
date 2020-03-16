@@ -16,4 +16,6 @@ public interface UserService {
     UserDO getOneUserByUserId(String inputUserId);
 
     boolean updateUser(UpdateUserForm form) throws ParseException;
+
+    boolean updateUserPswd(String userId, String npswd);
 }

@@ -37,14 +37,14 @@
                             <div class="row">
                                 <label class="control-label col-md-3">昵称 </label>
                                 <label class="form-label col-md-8" th:text = "${u.name}"></label>
-                                <input id="uname" name="uname" class="form-control"  th:value="${u.name}"/>
+                                <input id="uname" name="uname" class="form-control" type = "hidden" th:value="${u.name}"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="row">
                                 <label class="form-label col-md-3">密码 </label>
                                 <div class="col-md-8">
-                                    <button class="btn btn-block btn-info"  type="button" onclick="javascript:history.back(-1);">修改密码</button>
+                                    <button class="btn btn-block btn-info"  type="button" data-toggle="modal" data-target="#updatePswd">修改密码</button>
                                 </div>
                             </div>
                         </div>
@@ -100,6 +100,53 @@
                     </form>
                 </div>
             </div>
+            <div class="modal fade" id="updatePswd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id = "updateUserPwdForm" name = "updateUserPwdForm">
+                             <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel">修改密码</h4>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                    </div>
+                                    <label class="form-label col-md-3">旧密码 </label>
+                                    <div class="col-md-5">
+                                        <input id="opswd" name="opswd" type = "password" class="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                    </div>
+                                    <label class="form-label col-md-3">新密码 </label>
+                                    <div class="col-md-5">
+                                        <input id="npswd" name="npswd" type = "password" class="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-1">
+                                    </div>
+                                    <label class="form-label col-md-3">确认新密码 </label>
+                                    <div class="col-md-5">
+                                        <input id="cfrmpswd" name="cfrmpswd" type = "password" class="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button id = "updatePswdBtn" name = "updatePswdBtn" type="button" class="btn btn-primary">提交更改</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </div>
@@ -182,14 +229,6 @@
                     var birthday = $("#birthday").val();
                     var age = $("#age").val();
                     var address = $("#address").val();
-                    console.log(userId);
-                    console.log(userName);
-                    console.log(email);
-                    console.log(sex);
-                    console.log(birthday);
-                    console.log(age);
-                    console.log(address);
-
                 $.ajax({
                         url:"/person/updateUser",
                         type:"POST",
@@ -208,7 +247,9 @@
                                     location.href="/person/toCenter";
                                 });
                             }else{
-                                layer.alert(data.msg);
+                                layer.alert(data.msg,function () {
+                                    location.href="/person/toCenter";
+                                });
                             }
                         },
                         error:function () {
@@ -216,6 +257,99 @@
                         }
                     });
                 }
+        });
+    });
+
+
+    $(function() {
+        $("#updateUserPwdForm").bootstrapValidator({
+            live: 'enabled',
+            excluded: [':disabled', 'hidden', ':not(:visible)'],
+            submitButtons: '#loginBtn',
+            message: '通用的验证失败消息',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                opswd: {
+                    validators: {
+                        notEmpty: {
+                            message: '旧密码不能为空'
+                        },
+                        stringLength: {
+                            max: 16,
+                            message: '旧密码不能超过16位'
+                        }
+                    }
+                },
+                npswd: {
+                    validators: {
+                        notEmpty: {
+                            message: '新密码密码不能为空'
+                        },
+                        stringLength: {
+                            max: 16,
+                            message: '新密码不能超过16位'
+                        },
+                        identical: {
+                            field: 'cfrmpswd',
+                            message: '用户新密码与确认密码不一致！'
+                        }
+                    }
+                },
+                cfrmpswd: {
+                    validators: {
+                        notEmpty: {
+                            message: '确认密码不能为空'
+                        },
+                        stringLength: {
+                            max: 16,
+                            message: '确认密码不能超过16位'
+                        },
+                        identical: {
+                            field: 'npswd',
+                            message: '用户新密码与确认密码不一致！'
+                        }
+                    }
+                }
+            }
+        });
+        $("#updatePswdBtn").click(function () { //非submit按钮点击后进行验证，如果是submit则无需此句直接验证
+            $("#updateUserPwdForm").bootstrapValidator('validate'); //提交验证
+            if ($("#updateUserPwdForm").data('bootstrapValidator').isValid()) { //获取验证结果，如果成功，执行下面代码
+                var userId = $("#userId").val();
+                var opswd = $("#opswd").val();
+                var npswd = $("#npswd").val();
+                opswd = encryptPwd(opswd);
+                npswd = encryptPwd(npswd);
+                console.log("旧密码：" + opswd);
+                console.log("新密码：" + npswd);
+                $.ajax({
+                    url:"/person/updateUserPswd",
+                    type:"POST",
+                    data:{
+                        userId:userId,
+                        opswd:opswd,
+                        npswd:npswd
+                    },
+                    success:function (data) {
+                        if (data.code == 0) {
+                            layer.alert("更新成功",function () {
+                                location.href="/person/toCenter";
+                            });
+                        }else{
+                            layer.alert(data.msg,function () {
+                                location.href="/person/toCenter";
+                            });
+                        }
+                    },
+                    error:function () {
+                        layer.alert("登陆失败,客户端请求有误");
+                    }
+                });
+            }
         });
     });
 

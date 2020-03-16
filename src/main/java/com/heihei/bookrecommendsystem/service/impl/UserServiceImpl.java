@@ -72,4 +72,12 @@ public class UserServiceImpl implements UserService {
         int num = userMapper.updateByPrimaryKeySelective(user);
         return num > 0;
     }
+
+    @Override
+    public boolean updateUserPswd(String userId, String npswd) {
+        UserDO user = getOneUserByUserId(userId);
+        user.setPassword(npswd);
+        int num = userMapper.updateByPrimaryKeySelective(user);
+        return num > 0;
+    }
 }
