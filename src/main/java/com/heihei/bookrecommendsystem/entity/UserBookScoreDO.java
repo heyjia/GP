@@ -3,17 +3,17 @@ package com.heihei.bookrecommendsystem.entity;
 import java.util.Date;
 
 public class UserBookScoreDO {
-    private int id;
-    private int userId;
+    private Integer id;
+    private Integer userId;
     private long bookId;
-    private int secre;
+    private Integer secre;
     private String describe;
     private Date updtTime;
 
     public UserBookScoreDO() {
     }
 
-    public UserBookScoreDO(int id, int userId, long bookId, int secre, String describe, Date updtTime) {
+    public UserBookScoreDO(Integer id, Integer userId, long bookId, Integer secre, String describe, Date updtTime) {
         this.id = id;
         this.userId = userId;
         this.bookId = bookId;
@@ -22,19 +22,19 @@ public class UserBookScoreDO {
         this.updtTime = updtTime;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -46,11 +46,11 @@ public class UserBookScoreDO {
         this.bookId = bookId;
     }
 
-    public int getSecre() {
+    public Integer getSecre() {
         return secre;
     }
 
-    public void setSecre(int secre) {
+    public void setSecre(Integer secre) {
         this.secre = secre;
     }
 

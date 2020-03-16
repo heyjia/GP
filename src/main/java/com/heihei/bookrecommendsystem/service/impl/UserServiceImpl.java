@@ -2,15 +2,22 @@ package com.heihei.bookrecommendsystem.service.impl;
 
 import com.heihei.bookrecommendsystem.dao.UserMapper;
 import com.heihei.bookrecommendsystem.entity.UserDO;
+import com.heihei.bookrecommendsystem.entity.form.UpdateUserForm;
 import com.heihei.bookrecommendsystem.entity.form.UserForm;
 import com.heihei.bookrecommendsystem.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Service
 public class UserServiceImpl implements UserService {
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
     UserMapper userMapper;
     @Override
@@ -48,5 +55,21 @@ public class UserServiceImpl implements UserService {
         UserDO query = new UserDO();
         query.setUserId(userId);
         return userMapper.selectOne(query);
+    }
+
+    @Override
+    public boolean updateUser(UpdateUserForm form) throws ParseException {
+        UserDO user = getOneUserByUserId(form.getUserId());
+        user.setEmail(form.getEmail());
+        user.setName(form.getUserName());
+        user.setAddress(form.getAddress());
+        user.setAge(form.getAge());
+        user.setSex(form.getSex());
+        user.setUpdtTime(new Date());
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        logger.info("更新后的用户信息:" + user.toString());
+        user.setBirthday(format.parse(form.getBirthday()));
+        int num = userMapper.updateByPrimaryKeySelective(user);
+        return num > 0;
     }
 }

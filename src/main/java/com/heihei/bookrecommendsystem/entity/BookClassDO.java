@@ -6,7 +6,7 @@ import javax.persistence.Table;
 @Table(name = "book_class")
 public class BookClassDO {
     @Id
-    private int id;
+    private Integer id;
 
     private String name;
 
@@ -17,18 +17,18 @@ public class BookClassDO {
     public BookClassDO() {
     }
 
-    public BookClassDO(int id, String name, String count, float avgRateValue) {
+    public BookClassDO(Integer id, String name, String count, float avgRateValue) {
         this.id = id;
         this.name = name;
         this.count = count;
         this.avgRateValue = avgRateValue;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

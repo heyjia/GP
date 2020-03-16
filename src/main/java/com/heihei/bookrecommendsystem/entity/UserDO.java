@@ -1,5 +1,6 @@
 package com.heihei.bookrecommendsystem.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
@@ -7,12 +8,13 @@ import java.util.Date;
 @Table(name = "user")
 public class UserDO {
     @Id
-    private int id;
+    private Integer id;
+
     private String userId;
     private String name;
     private String password;
-    private int sex;
-    private int age;
+    private Integer sex;
+    private Integer age;
     private String email;
     private Date birthday;
     private String address;
@@ -21,11 +23,11 @@ public class UserDO {
 
     public UserDO() {
     }
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -45,11 +47,11 @@ public class UserDO {
         this.password = password;
     }
 
-    public int getSex() {
+    public Integer getSex() {
         return sex;
     }
 
-    public void setSex(int sex) {
+    public void setSex(Integer sex) {
         this.sex = sex;
     }
 
@@ -93,15 +95,15 @@ public class UserDO {
         this.updtTime = updtTime;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
-    public UserDO(int id, String userId, String name, String password, int sex, int age, String email, Date birthday, String address, Date crtTime, Date updtTime) {
+    public UserDO(Integer id, String userId, String name, String password, Integer sex, Integer age, String email, Date birthday, String address, Date crtTime, Date updtTime) {
         this.id = id;
         this.userId = userId;
         this.name = name;

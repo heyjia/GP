@@ -6,9 +6,9 @@ import javax.persistence.Table;
 @Table(name = "role_privilege")
 public class RolePrivilegeDO {
     @Id
-    private int id;
-    private int roleId;
-    private int privilegeId;
+    private Integer id;
+    private Integer roleId;
+    private Integer privilegeId;
 
     @Override
     public String toString() {
@@ -22,33 +22,33 @@ public class RolePrivilegeDO {
     public RolePrivilegeDO() {
     }
 
-    public RolePrivilegeDO(int id, int roleId, int privilegeId) {
+    public RolePrivilegeDO(Integer id, Integer roleId, Integer privilegeId) {
         this.id = id;
         this.roleId = roleId;
         this.privilegeId = privilegeId;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getRoleId() {
+    public Integer getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(int roleId) {
+    public void setRoleId(Integer roleId) {
         this.roleId = roleId;
     }
 
-    public int getPrivilegeId() {
+    public Integer getPrivilegeId() {
         return privilegeId;
     }
 
-    public void setPrivilegeId(int privilegeId) {
+    public void setPrivilegeId(Integer privilegeId) {
         this.privilegeId = privilegeId;
     }
 }

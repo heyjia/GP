@@ -78,7 +78,7 @@ public class LoginController {
         }catch (IncorrectCredentialsException ice){
             return  Result.error(CodeMsg.PASSWORD_ERROR);
         }catch (UnknownAccountException uae){
-            return  Result.error(CodeMsg.UNKNOWACCOUNT);
+            return  Result.error(CodeMsg.UNKNOW_ACCOUNT);
         }catch (Exception e) {
             //其他错误登录异常
             return Result.error(new CodeMsg(10003,e.getMessage()));

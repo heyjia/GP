@@ -6,24 +6,24 @@ import javax.persistence.Table;
 @Table(name = "privilege")
 public class PrivilegeDO {
     @Id
-    private int id;
+    private Integer id;
     private String name;
     private String url;
 
     public PrivilegeDO() {
     }
 
-    public PrivilegeDO(int id, String name, String url) {
+    public PrivilegeDO(Integer id, String name, String url) {
         this.id = id;
         this.name = name;
         this.url = url;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
