@@ -8,22 +8,164 @@
     <script type = "text/javascript" th:src="@{/jquery/2.1.1/jquery.min.js}"></script>
     <script type = "text/javascript" th:src="@{/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/star-rating.min.css}"/>
     <script type="text/javascript" th:src="@{/js/bootstrapValidator.js}"></script>
     <script type="text/javascript" th:src="@{/layer/layer.js}"></script>
     <script type="text/javascript" th:src="@{/js/common.js}"></script>
     <script type="text/javascript" th:src="@{/js/jsencrypt.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/star-rating.min.js}"></script>
 </head>
+<script>
 
+</script>
 <body>
 <div class = "container">
     <div th:include="include/head::nav">
     </div>
-    <div class = "panel-heading">
-        <h3 class = "panel-title" th:text = "${book.name}"></h3>
+    <ol class = "breadcrumb">
+        <li><a href = "http://localhost:8080/login/toIndex">主页</a></li>
+        <li><a href = "#" th:text="${class.name}"></a></li>
+    </ol>
+    <div class = "panel panel-default">
+        <div class = "panel-heading">
+            <h3 class = "panel-title" th:text = "${book.name}"></h3>
+        </div>
+        <div class="panel-body">
+            <div style="float:left">
+                <img class = "img-responsive" th:width="170px" th:src="${book.imgAddr}" />
+            </div>
+            <div class = "row">
+                <div class = "col-md-4">
+                    <input id="bookId" name = "bookId" type="hidden" th:value="${book.id}"/>
+                    <p th:text = "'作者:' +${book.author}"></p>
+                    <p th:text = "'类别:' + ${book.category}"></p>
+                    <p th:if="${book.publishHourse} ne 'null'" th:text = "'出版社:' + ${book.publishHourse}"></p>
+                    <p th:if="${book.publishHourse} eq 'null'" th:text = "'出版社:暂无'"></p>
+                    <p th:text = "'提供方:' + ${book.provider}"></p>
+                    <p th:text = "'字数:约' + ${book.wordsCount} + '字'"></p>
+                    <p th:if="${book.ISBN} ne 'null'" th:text = "'ISBN:' + ${book.ISBN}"></p>
+                    <p th:if="${book.ISBN} eq 'null'" th:text = "'ISBN:暂无' "></p>
+                    <p th:text = "'分类:' + ${class.name}"></p>
+                </div>
+                <div class = "col-md-4">
+                    <input id = "ratingAvgValue" type = "hidden" th:value="${book.avgRatingVal}"/>
+                    <input id = "ratingValue" type = "number" class="rating" readonly="true"/>
+                    <p th:if="${book.avgRatingVal} != null"th:text = "'综合评分:' + ${book.avgRatingVal}"></p>
+                    <p th:if="${book.avgRatingVal} == null"th:text = "'综合评分:暂无评分'"></p>
+                    <p th:if="${book.avgRatingVal} != null"th:text = "${book.avgRatingVal}+'人评分'"></p>
+                    <p th:if="${book.avgRatingVal} == null"th:text = "'评分人数不足'"></p>
+                </div>
+            </div>
+        </div>
+        <div class = "panel panel-default">
+            <div class = "panel-heading">
+                <h3 class = "panel-title">评分数据图表</h3>
+            </div>
+            <div class = "panel-body">
+
+            </div>
+        </div>
+        <div class = "panel panel-default">
+            <div class = "panel-heading">
+                <h3 class = "panel-title">作品简介</h3>
+            </div>
+            <div class = "panel-body">
+                <p th:text="${book.bookInfo}"></p>
+            </div>
+        </div>
+        <div class = "panel panel-default">
+            <div class = "panel-heading">
+                <h3 class = "panel-title">你可能还喜欢...</h3>
+            </div>
+            <div class = "panel-body">
+            </div>
+        </div>
+        <h3>评论区</h3>
+        <hr />
+        <div class = "panel panel-default">
+            <div class = "panel-heading">
+                <h3 class = "panel-title">你的评论</h3>
+            </div>
+            <div class = "panel-body">
+                <div class="col-md-6">
+                    <textarea id = "describeInfo" name = "describeInfo" class="form-control" rows="5" style="width: 500px"></textarea>
+                </div>
+                <div class="col-md-4">
+                    <input id = "ratingBookScore" type = "number" class="rating"/>
+                    <input id = "ratingBookBtn" name = "ratingBookBtn"  type="button" class="btn btn-info"
+                           value="提交" onclick="describeBook()" />
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 </body>
+<script>
+    var avgScore = $("#ratingAvgValue").val();
+    if (avgScore <= 1) {
+        $("#ratingValue").val(0.5);
+    }else if (avgScore <= 2) {
+        $("#ratingValue").val(1);
+    }else if (avgScore <= 3) {
+        $("#ratingValue").val(1.5);
+    }else if (avgScore <= 4) {
+        $("#ratingValue").val(2);
+    }else if (avgScore <= 5) {
+        $("#ratingValue").val(2.5);
+    }else if (avgScore <= 6) {
+        $("#ratingValue").val(3);
+    }else if (avgScore <= 7) {
+        $("#ratingValue").val(3.5);
+    }else if (avgScore <= 8) {
+        $("#ratingValue").val(4);
+    }else if (avgScore <= 9) {
+        $("#ratingValue").val(4.5);
+    }else if (avgScore > 9) {
+        $("#ratingValue").val(5);
+    }
+    $('#ratingValue').rating('refresh',{
+            step: 0.5,
+            size: 'xs',//星星大小可选lg,sm,xl,xs
+            starCaptions: {1: 'Very Poor', 2: 'Poor', 3: 'Ok', 4: 'Good', 5: 'Very Good'},
+            starCaptionClasses: {1: 'text-danger', 2: 'text-warning', 3: 'text-info', 4: 'text-primary', 5: 'text-success'}
+        });
+    $('#ratingBookScore').rating('refresh',{
+        step: 0.5,
+        size: 'xs',//星星大小可选lg,sm,xl,xs
+        starCaptions: {1: 'Very Poor', 2: 'Poor', 3: 'Ok', 4: 'Good', 5: 'Very Good'}
+    });
+    function describeBook() {
+        var describeInfo = $('#describeInfo').val();
+        var userId = $('#uId').val();
+        var bookId = $('#bookId').val();
+        var score = $('#ratingBookScore').val();
+        $.ajax({
+            url:"/book/userRateBook",
+            type:"POST",
+            data:{
+                userId:userId,
+                bookId:bookId,
+                score:score,
+                describeInfo:describeInfo
+            },
+            success:function (data) {
+                if (data.code == 0) {
+                    layer.alert("评论成功",function () {
+                        location.href="/book/toInfo?bookId=" + bookId;
+                    });
+                }else{
+                    layer.alert(data.msg,function () {
+                        location.href="/book/toInfo?bookId=" + bookId;
+                    });
+                }
+            },
+            error:function () {
+                layer.msg("登陆失败,客户端请求有误");
+            }
+        });
+    }
 
+</script>
 
 </html>

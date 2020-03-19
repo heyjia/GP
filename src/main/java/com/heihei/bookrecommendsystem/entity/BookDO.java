@@ -162,11 +162,11 @@ public class BookDO {
         this.scoreAddr = scoreAddr;
     }
 
-    public String getbookInfo() {
+    public String getBookInfo() {
         return bookInfo;
     }
 
-    public void setbookInfo(String bookInfo) {
+    public void setBookInfo(String bookInfo) {
         this.bookInfo = bookInfo;
     }
 
@@ -224,5 +224,4 @@ public class BookDO {
                 ", back='" + back + '\'' +
                 '}';
     }
-
 }

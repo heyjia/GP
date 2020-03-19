@@ -1,24 +1,28 @@
 package com.heihei.bookrecommendsystem.entity;
 
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
+@Table(name = "user_book_score")
 public class UserBookScoreDO {
+    @Id
     private Integer id;
     private Integer userId;
-    private long bookId;
-    private Integer secre;
-    private String describe;
+    private Integer bookId;
+    private Float score;
+    private String describeInfo;
     private Date updtTime;
 
     public UserBookScoreDO() {
     }
 
-    public UserBookScoreDO(Integer id, Integer userId, long bookId, Integer secre, String describe, Date updtTime) {
+    public UserBookScoreDO(Integer id, Integer userId, Integer bookId, Float score, String describeInfo, Date updtTime) {
         this.id = id;
         this.userId = userId;
         this.bookId = bookId;
-        this.secre = secre;
-        this.describe = describe;
+        this.score = score;
+        this.describeInfo = describeInfo;
         this.updtTime = updtTime;
     }
 
@@ -38,30 +42,29 @@ public class UserBookScoreDO {
         this.userId = userId;
     }
 
-    public long getBookId() {
+    public Integer getBookId() {
         return bookId;
     }
 
-    public void setBookId(long bookId) {
+    public void setBookId(Integer bookId) {
         this.bookId = bookId;
     }
 
-    public Integer getSecre() {
-        return secre;
+    public Float getScore() {
+        return score;
     }
 
-    public void setSecre(Integer secre) {
-        this.secre = secre;
+    public void setScore(Float score) {
+        this.score = score;
     }
 
-    public String getDescribe() {
-        return describe;
+    public String getdescribeInfo() {
+        return describeInfo;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setdescribeInfo(String describeInfo) {
+        this.describeInfo = describeInfo;
     }
-
 
     public Date getUpdtTime() {
         return updtTime;
@@ -77,8 +80,8 @@ public class UserBookScoreDO {
                 "id=" + id +
                 ", userId=" + userId +
                 ", bookId=" + bookId +
-                ", secre=" + secre +
-                ", describe='" + describe + '\'' +
+                ", score=" + score +
+                ", describeInfo='" + describeInfo + '\'' +
                 ", updtTime=" + updtTime +
                 '}';
     }

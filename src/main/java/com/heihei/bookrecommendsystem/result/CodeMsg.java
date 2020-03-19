@@ -11,7 +11,7 @@ public class CodeMsg {
 
     private int code;
     private String msg;
-
+    public static CodeMsg SYSTEM_ERROR = new CodeMsg(99999,"系统出了点小差，请稍后再试");
     public static CodeMsg PASSWORD_ERROR = new CodeMsg(10001,"密码错误");
     public static CodeMsg UNKNOW_ACCOUNT = new CodeMsg(10002,"用户不存在");
     public static CodeMsg LOGOUT_ERROR = new CodeMsg(10004,"登录失败");
