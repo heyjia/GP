@@ -1,12 +1,18 @@
 package com.heihei.bookrecommendsystem.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.heihei.bookrecommendsystem.dao.BookClassMapper;
 import com.heihei.bookrecommendsystem.dao.BookMapper;
 import com.heihei.bookrecommendsystem.dao.UserBookScoreMapper;
 import com.heihei.bookrecommendsystem.entity.BookClassDO;
 import com.heihei.bookrecommendsystem.entity.BookDO;
 import com.heihei.bookrecommendsystem.entity.UserBookScoreDO;
+import com.heihei.bookrecommendsystem.entity.vo.UserRatingBookDetailVO;
 import com.heihei.bookrecommendsystem.service.BookService;
+import com.heihei.bookrecommendsystem.util.PageReq;
+import com.heihei.bookrecommendsystem.util.PageResultSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +58,24 @@ public class BookServiceImpl implements BookService {
     public int userRateBook(UserBookScoreDO userBookScore) {
         userBookScore.setUpdtTime(new Date());
         return userBookScoreMapper.insert(userBookScore);
+    }
+
+    /**
+     * 分页查询
+     * @param page
+     * @param bookId
+     * @return
+     */
+    @Override
+    public PageResultSet getAllBookRateByBookId(PageReq page, Integer bookId) {
+        PageHelper.startPage(page.getPage(),page.getLimit());
+        Page<UserRatingBookDetailVO> vos = (Page<UserRatingBookDetailVO>)userBookScoreMapper.getAllBookRateByBookId(bookId);
+        PageInfo<UserRatingBookDetailVO> voList = vos.toPageInfo();
+        PageResultSet pageResultSet = new PageResultSet();
+        pageResultSet.setCount(voList.getTotal());
+        pageResultSet.setDataList(voList.getList());
+        pageResultSet.setLimit(voList.getSize());
+        pageResultSet.setPage(voList.getPageNum());
+        return pageResultSet;
     }
 }
