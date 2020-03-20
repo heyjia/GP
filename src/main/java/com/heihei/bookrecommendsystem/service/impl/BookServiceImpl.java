@@ -9,6 +9,7 @@ import com.heihei.bookrecommendsystem.dao.UserBookScoreMapper;
 import com.heihei.bookrecommendsystem.entity.BookClassDO;
 import com.heihei.bookrecommendsystem.entity.BookDO;
 import com.heihei.bookrecommendsystem.entity.UserBookScoreDO;
+import com.heihei.bookrecommendsystem.entity.vo.BookAndClassVO;
 import com.heihei.bookrecommendsystem.entity.vo.UserRatingBookDetailVO;
 import com.heihei.bookrecommendsystem.service.BookService;
 import com.heihei.bookrecommendsystem.util.PageReq;
@@ -71,6 +72,46 @@ public class BookServiceImpl implements BookService {
         PageHelper.startPage(page.getPage(),page.getLimit());
         Page<UserRatingBookDetailVO> vos = (Page<UserRatingBookDetailVO>)userBookScoreMapper.getAllBookRateByBookId(bookId);
         PageInfo<UserRatingBookDetailVO> voList = vos.toPageInfo();
+        PageResultSet pageResultSet = new PageResultSet();
+        pageResultSet.setCount(voList.getTotal());
+        pageResultSet.setDataList(voList.getList());
+        pageResultSet.setLimit(voList.getSize());
+        pageResultSet.setPage(voList.getPageNum());
+        return pageResultSet;
+    }
+
+    @Override
+    public PageResultSet getBooksBySelKey(PageReq page, String selKey) {
+        PageHelper.startPage(page.getPage(),page.getLimit());
+        Page<BookAndClassVO> vos = (Page<BookAndClassVO>)bookMapper.getBooksBySelKey(selKey);
+        PageResultSet pageResultSet = getPageResultSet(vos);
+        return pageResultSet;
+    }
+
+    @Override
+    public Integer countBookBySelKey(String selKey) {
+        Integer num = bookMapper.countBookBySelKey(selKey);
+        return num;
+    }
+
+    @Override
+    public PageResultSet getBooksBySelKeySortByScore(PageReq page, String selKey) {
+        PageHelper.startPage(page.getPage(),page.getLimit());
+        Page<BookAndClassVO> vos = (Page<BookAndClassVO>)bookMapper.getBooksBySelKeySortByScore(selKey);
+        PageResultSet pageResultSet = getPageResultSet(vos);
+        return pageResultSet;
+    }
+
+    @Override
+    public PageResultSet getBooksBySelKeySortByWordCount(PageReq page, String selKey) {
+        PageHelper.startPage(page.getPage(),page.getLimit());
+        Page<BookAndClassVO> vos = (Page<BookAndClassVO>)bookMapper.getBooksBySelKeySortByWordCount(selKey);
+        PageResultSet pageResultSet = getPageResultSet(vos);
+        return pageResultSet;
+    }
+
+    private PageResultSet getPageResultSet(Page<BookAndClassVO> vos) {
+        PageInfo<BookAndClassVO> voList = vos.toPageInfo();
         PageResultSet pageResultSet = new PageResultSet();
         pageResultSet.setCount(voList.getTotal());
         pageResultSet.setDataList(voList.getList());

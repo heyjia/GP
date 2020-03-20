@@ -1,6 +1,7 @@
 package com.heihei.bookrecommendsystem.dao;
 
 
+import com.heihei.bookrecommendsystem.entity.BookDO;
 import com.heihei.bookrecommendsystem.entity.UserBookScoreDO;
 import com.heihei.bookrecommendsystem.entity.vo.UserRatingBookDetailVO;
 import org.apache.ibatis.annotations.Select;
@@ -20,6 +21,7 @@ public interface UserBookScoreMapper extends BaseMapper<UserBookScoreDO> {
             "FROM \n" +
             "user_book_score ubs,`user` u \n" +
             "WHERE \n" +
-            "ubs.`user_id` = u.`id` AND book_id = 2")
+            "ubs.`user_id` = u.`id` AND book_id = #{bookId}")
     List<UserRatingBookDetailVO> getAllBookRateByBookId(Integer bookId);
+
 }

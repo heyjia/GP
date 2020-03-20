@@ -19,4 +19,12 @@ public interface BookService {
     int userRateBook(UserBookScoreDO userBookScore);
 
     PageResultSet getAllBookRateByBookId(PageReq page, Integer bookId);
+
+    PageResultSet getBooksBySelKey(PageReq page, String selKey);
+
+    Integer countBookBySelKey(String selKey);
+
+    PageResultSet getBooksBySelKeySortByScore(PageReq page, String selKey);
+
+    PageResultSet getBooksBySelKeySortByWordCount(PageReq page, String selKey);
 }

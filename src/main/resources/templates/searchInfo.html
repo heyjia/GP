@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer" />
+    <meta name="referrer" content="no-referrer" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>电子书推荐社区</title>
+    <script type = "text/javascript" th:src="@{/jquery/2.1.1/jquery.min.js}"></script>
+    <script type = "text/javascript" th:src="@{/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/js/bootstrapValidator.js}"></script>
+    <script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jsencrypt.min.js}"></script>
+</head>
+
+<body>
+<div class = "container">
+    <div th:include="include/head::nav">
+    </div>
+    <div class = "row clearfix">
+        <div class = "container">
+            <h2>搜索结果</h2>
+            <p>共找到<span id = "bookCount" th:text="${pages.count}"></span>条结果</p>
+        </div>
+        <div class = "row">
+            <div class = "col-md-1">
+                <button id = "sortByScoreBtn" class = "btn btn-primary" type="button" th:onclick="sortByScore([[${pages.page}]],[[${pages.limit}]],[[${key}]],'score')">评分排序</button>
+            </div>
+            <div class = "col-md-1">
+                <button id = "sortByWordsCountBtn" class = "btn btn-primary" type="button" th:onclick="sortByScore([[${pages.page}]],[[${pages.limit}]],[[${key}]],'wordCount')">字数排序</button>
+            </div>
+        </div>
+        <br/>
+        <table class = "table table-bordered">
+            <div th:each="book:${pages.dataList}">
+                <div class = "panel panel-default">
+                    <div class = "panel-heading">
+                        <a class = "panel-title" th:text = "${book.name}" th:href = "'/book/toInfo?bookId=' + ${book.id} + '&page=1&limit=5'"></a>
+                    </div>
+                    <div style="float: left;">
+                        <img class = "img-responsive" th:width="170px" th:src="${book.imgAddr}" />
+                    </div>
+                    <div class="row">
+                        <div class = "col-md-3">
+                            <input id="bookId" name = "bookId" type="hidden" th:value="${book.id}"/>
+                            <p th:text = "'作者:' +${book.author}"></p>
+                            <p th:text = "'类别:' + ${book.category}"></p>
+                            <p th:if="${book.publishHourse} ne 'null'" th:text = "'出版社:' + ${book.publishHourse}"></p>
+                            <p th:if="${book.publishHourse} eq 'null'" th:text = "'出版社:暂无'"></p>
+                            <p th:text = "'提供方:' + ${book.provider}"></p>
+                            <p th:text = "'字数:约' + ${book.wordsCount} + '字'"></p>
+                            <p th:if="${book.ISBN} ne 'null'" th:text = "'ISBN:' + ${book.ISBN}"></p>
+                            <p th:if="${book.ISBN} eq 'null'" th:text = "'ISBN:暂无' "></p>
+                            <p th:text = "'分类:' + ${book.className}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </table>
+        <div class="row text-center">
+            <button id="backPageBtn" class="btn btn-primary" type="button" th:onclick="backPage([[${pages.page}]],[[${pages.limit}]],[[${key}]])">上一页</button>
+            <!-- 快速翻页按钮位置 -->
+            <span>&nbsp;第<span th:text="${pages.page}"></span>页&nbsp;</span>
+            <button id="nextPageBtn" class="btn btn-primary" type="button"  th:onclick="nextPage([[${pages.page}]],[[${pages.limit}]],[[${key}]],[[${pages.count}]])">下一页</button>
+            <span>&nbsp;&nbsp;</span>
+            <!-- 当前显示评论条数与总条数 -->
+            <span id="curNum" th:text="${pages.limit}"></span><span>条/</span><span>共</span><span id="totalNum" th:text="${pages.count}"></span><span>条</span>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    function backPage(page,limit,key) {
+        if (page <= 1) {
+            layer.alert("当前是第一页");
+            return;
+        }
+        page = page - 1;
+        location.href="/book/searchBook?selKey=" + key + "&page=" + page + "&limit=" + limit;
+    }
+    function nextPage(page,limit,key,count) {
+        if (page*5 >= count) {
+            layer.alert("当前是最后一页");
+            return;
+        }
+        page = page + 1;
+        location.href="/book/searchBook?selKey=" + key + "&page=" + page + "&limit=" + limit;
+    }
+
+    function sortByScore(page,limit,key,type) {
+        location.href="/book/searchBook?selKey=" + key + "&page=" + page + "&limit=" + limit + "&sortType=" + type;
+    }
+</script>
+
+</html>

@@ -8,3 +8,10 @@ function encryptPwd(password){
     console.log("加密后："+ password);
     return password;
 }
+function search() {
+    var selKey = $('#selKey').val();
+    var limit = 5;
+    var page = 1;
+    var url = "/book/searchBook?selKey=" + selKey +"&page=" + page + "&limit=" + limit;
+    window.location.href = url;
+}

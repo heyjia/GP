@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>图书详情</title>
     <script type = "text/javascript" th:src="@{/jquery/2.1.1/jquery.min.js}"></script>
@@ -106,15 +107,17 @@
                     <p th:text = "${page.describeInfo}"></p>
                 </div>
             </div>
-            <!-- 翻页按钮 -->
-            <div class="row text-center">
-                <button id="backPageBtn" class="btn btn-primary" type="button" th:onclick="'javascript:backPage('+${pages.page}+','+${pages.limit}+','+${book.id}+')'">上一页</button>
-                <!-- 快速翻页按钮位置 -->
-                <span>&nbsp;第<span th:text="${pages.page}"></span>页&nbsp;</span>
-                <button id="nextPageBtn" class="btn btn-primary" type="button"  th:onclick="'javascript:nextPage('+${pages.page}+','+${pages.limit}+','+${book.id}+','+${pages.count}+')'">下一页</button>
-                <span>&nbsp;&nbsp;</span>
-                <!-- 当前显示评论条数与总条数 -->
-                <span id="curNum" th:text="${pages.limit}"></span><span>条/</span><span>共</span><span id="totalNum" th:text="${pages.count}"></span><span>条</span>
+            <div th:fragment = "foot">
+                <!-- 翻页按钮 -->
+                <div class="row text-center">
+                    <button id="backPageBtn" class="btn btn-primary" type="button" th:onclick="'javascript:backPage('+${pages.page}+','+${pages.limit}+','+${book.id}+')'">上一页</button>
+                    <!-- 快速翻页按钮位置 -->
+                    <span>&nbsp;第<span th:text="${pages.page}"></span>页&nbsp;</span>
+                    <button id="nextPageBtn" class="btn btn-primary" type="button"  th:onclick="'javascript:nextPage('+${pages.page}+','+${pages.limit}+','+${book.id}+','+${pages.count}+')'">下一页</button>
+                    <span>&nbsp;&nbsp;</span>
+                    <!-- 当前显示评论条数与总条数 -->
+                    <span id="curNum" th:text="${pages.limit}"></span><span>条/</span><span>共</span><span id="totalNum" th:text="${pages.count}"></span><span>条</span>
+                </div>
             </div>
         </div>
 
@@ -201,7 +204,7 @@
         location.href="/book/toInfo?bookId=" + bookId + "&page=" + page + "&limit=" + limit;
     }
     function nextPage(page,limit,bookId,count) {
-        if (page*limit >= count) {
+        if (page*5 >= count) {
             layer.alert("当前是最后一页");
             return;
         }

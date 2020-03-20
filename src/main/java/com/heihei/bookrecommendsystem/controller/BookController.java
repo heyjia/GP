@@ -1,22 +1,19 @@
 package com.heihei.bookrecommendsystem.controller;
 
-import com.heihei.bookrecommendsystem.entity.BookClassDO;
-import com.heihei.bookrecommendsystem.entity.BookDO;
-import com.heihei.bookrecommendsystem.entity.UserBookScoreDO;
-import com.heihei.bookrecommendsystem.entity.UserDO;
+import com.heihei.bookrecommendsystem.entity.*;
+import com.heihei.bookrecommendsystem.entity.vo.BookAndClassVO;
+import com.heihei.bookrecommendsystem.entity.vo.SearchBookVO;
 import com.heihei.bookrecommendsystem.entity.vo.UserRatingBookDetailVO;
 import com.heihei.bookrecommendsystem.result.CodeMsg;
 import com.heihei.bookrecommendsystem.result.Result;
 import com.heihei.bookrecommendsystem.service.BookService;
 import com.heihei.bookrecommendsystem.util.PageReq;
 import com.heihei.bookrecommendsystem.util.PageResultSet;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -68,5 +65,34 @@ public class BookController {
             return Result.error(CodeMsg.SYSTEM_ERROR);
         }
         return Result.success(true);
+    }
+
+    @RequestMapping(value = "/searchBook")
+    public String searchBook(Model model, UserDO userDO,String selKey,PageReq page,String sortType) {
+        logger.info(sortType);
+        logger.info(page.toString());
+        logger.info(selKey);
+        PageResultSet pageResultSet = null;
+        //根据类型排序
+        if ("score".equalsIgnoreCase(sortType)) {
+            pageResultSet = bookService.getBooksBySelKeySortByScore(page,selKey);
+        }else{
+            if ("wordCount".equalsIgnoreCase(sortType)) {
+                pageResultSet = bookService.getBooksBySelKeySortByWordCount(page,selKey);
+            }else{
+                pageResultSet = bookService.getBooksBySelKey(page,selKey);
+            }
+        }
+        List<BookAndClassVO> vos = (List<BookAndClassVO>)pageResultSet.getDataList();
+        for (BookAndClassVO vo : vos) {
+            logger.info("vo:" + vo.toString());
+        }
+     //   Integer bookNum = bookService.countBookBySelKey(selKey);
+        SearchBookVO vo = new SearchBookVO();
+        model.addAttribute("key",selKey);
+        model.addAttribute("u",userDO);
+        model.addAttribute("pages",pageResultSet);
+     //   model.addAttribute("count",bookNum);
+        return "searchInfo";
     }
 }

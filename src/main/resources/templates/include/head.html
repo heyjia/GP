@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script type = "text/javascript" th:src="@{/static/jquery/2.1.1/jquery.min.js}"></script>
     <script type = "text/javascript" th:src="@{/static/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
@@ -23,17 +24,16 @@
             <input id = "uId" name = "uId" th:value="${u.id}" type="hidden"/>
             <div class="collapse navbar-collapse"
                  id="bs-example-navbar-collapse-1">
-                <form class="navbar-form navbar-left" role="search">
+                <form class="navbar-form navbar-left">
                     <div class="form-group">
-                        <input type="text" id="keyword" class="form-control"
-                               placeholder="图书搜索"></input>
+                        <input type="text" id="selKey" name="selKey" class="form-control"
+                               placeholder="图书搜索"/>
                     </div>
-                    <button id="bt-navbar-form-search"
-                            class="btn btn-default">搜索</button>
+                    <button class="btn btn-default" type="button" onclick="search()">搜索</button>
                 </form>
                 <ul class="nav navbar-nav navbar-right" id="user-nav">
                     <li>
-                        <a id = "userName" name = "userName" th:text="${u.name}"/></a>
+                        <a id = "userName" name = "userName" th:text="${u.name}"></a>
                     </li>
                     <li><a href="http://localhost:8080/person/toCenter">个人中心</a></li>
                     <li>
