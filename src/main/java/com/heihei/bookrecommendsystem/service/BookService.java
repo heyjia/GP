@@ -27,4 +27,10 @@ public interface BookService {
     PageResultSet getBooksBySelKeySortByScore(PageReq page, String selKey);
 
     PageResultSet getBooksBySelKeySortByWordCount(PageReq page, String selKey);
+
+    PageResultSet getBooksByBookNameSortByScore(PageReq page, String selKey);
+
+    PageResultSet getBooksByBookNameSortByWordCount(PageReq page, String selKey);
+
+    PageResultSet getBooksByBookName(PageReq page, String selKey);
 }

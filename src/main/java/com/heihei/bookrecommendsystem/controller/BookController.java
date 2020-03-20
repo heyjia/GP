@@ -68,19 +68,32 @@ public class BookController {
     }
 
     @RequestMapping(value = "/searchBook")
-    public String searchBook(Model model, UserDO userDO,String selKey,PageReq page,String sortType) {
+    public String searchBook(Model model, UserDO userDO,String selKey,PageReq page,String sortType,String searchType) {
+        logger.info("sortType:" + searchType);
         logger.info(sortType);
         logger.info(page.toString());
         logger.info(selKey);
         PageResultSet pageResultSet = null;
         //根据类型排序
-        if ("score".equalsIgnoreCase(sortType)) {
-            pageResultSet = bookService.getBooksBySelKeySortByScore(page,selKey);
-        }else{
-            if ("wordCount".equalsIgnoreCase(sortType)) {
-                pageResultSet = bookService.getBooksBySelKeySortByWordCount(page,selKey);
+        if ("author".equals(searchType)) {
+            if ("score".equalsIgnoreCase(sortType)) {
+                pageResultSet = bookService.getBooksBySelKeySortByScore(page,selKey);
             }else{
-                pageResultSet = bookService.getBooksBySelKey(page,selKey);
+                if ("wordCount".equalsIgnoreCase(sortType)) {
+                    pageResultSet = bookService.getBooksBySelKeySortByWordCount(page,selKey);
+                }else{
+                    pageResultSet = bookService.getBooksBySelKey(page,selKey);
+                }
+            }
+        }else{
+            if ("score".equalsIgnoreCase(sortType)) {
+                pageResultSet = bookService.getBooksByBookNameSortByScore(page,selKey);
+            }else{
+                if ("wordCount".equalsIgnoreCase(sortType)) {
+                    pageResultSet = bookService.getBooksByBookNameSortByWordCount(page,selKey);
+                }else{
+                    pageResultSet = bookService.getBooksByBookName(page,selKey);
+                }
             }
         }
         List<BookAndClassVO> vos = (List<BookAndClassVO>)pageResultSet.getDataList();

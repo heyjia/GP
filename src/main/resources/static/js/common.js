@@ -9,9 +9,13 @@ function encryptPwd(password){
     return password;
 }
 function search() {
+    var searchType = $('#selectType option:selected').val();
+    if (searchType == "type") {
+        layer.alert("请先选择搜索类型");
+        return;
+    }
     var selKey = $('#selKey').val();
     var limit = 5;
     var page = 1;
-    var url = "/book/searchBook?selKey=" + selKey +"&page=" + page + "&limit=" + limit;
-    window.location.href = url;
+    window.location.href = "/book/searchBook?selKey=" + selKey + "&page=" + page + "&limit=" + limit + "&searchType=" + searchType;
 }
