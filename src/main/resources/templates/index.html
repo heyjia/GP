@@ -19,8 +19,99 @@
 <div class = "container">
     <div th:include="include/head::nav">
     </div>
-    <div th:include="include/menu::menu">
+    <div class="row">
+        <div th:include="include/menu::menu">
+        </div>
+        <div class = "col-md-9">
+<!--            轮播模板-->
+            <div class = "panel-body">
+                <div id = "carousel" class="carousel slide">
+                    <ol class = "carousel-indicators">
+                    <li data-target="#carousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#carousel" data-slide-to="1"></li>
+                    <li data-target="#carousel" data-slide-to="2"></li>
+                </ol>
+                    <div class = "carousel-inner">
+                        <div class = "item active">
+                            <img th:src="@{/img/lb02.jpg}" alt="First slide" />
+                        </div>
+                        <div class = "item">
+                            <img th:src="@{/img/lb01.jpg}" alt="Second slide" />
+                        </div>
+                        <div class = "item">
+                            <img th:src="@{/img/lb03.jpg}" alt="Third slide" />
+                        </div>
+                    </div>
+                    <a class="carousel-control left" href="#carousel"
+                       data-slide="prev">&lsaquo;</a> <a
+                        class="carousel-control right" href="#carousel"
+                        data-slide="next">&rsaquo;</a>
+                </div>
+            </div>
+            <h3>随机推荐</h3>
+            <hr />
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row" id="newBookDiv">
+                        <div th:each="book:${randomBooks}">
+                            <div class="col-md-3" id="randomBook-div">
+                                <div class="panel panel-default">
+                                    <div style="margin:0px auto">
+                                        <img width="100%"  th:src="${book.imgAddr}"/>
+                                        <a th:href = "'/book/toInfo?bookId=' + ${book.id} + '&page=1&limit=5'" th:text="${book.name}"></a>
+                                        <p id = "randomBookName" th:text="${book.author}" style="width:150px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>热门图书</h3>
+            <hr />
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row" id="hotBookDiv">
+                        <div th:each="book:${hotBooks}">
+                            <div class="col-md-3" id="hotBook-div">
+                                <div class="panel panel-default">
+                                    <div style="margin:0px auto">
+                                        <img width="100%"  th:src="${book.imgAddr}"/>
+                                        <a th:href = "'/book/toInfo?bookId=' + ${book.id} + '&page=1&limit=5'" th:text="${book.name}"></a>
+                                        <p id = "hotBookName" th:text="${book.author}" style="width:150px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            <h3>来自你感兴趣的分区</h3>
+            <hr />
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row" id="favoriteDiv">
+                        <p>登录后显示</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>猜你喜欢</h3>
+            <hr />
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="row" id="userRecommendedDiv">
+                        <p>登录后显示</p>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+
+        </div>
     </div>
+
 </div>
 
 </body>

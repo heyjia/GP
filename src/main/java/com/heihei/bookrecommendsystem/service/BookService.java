@@ -41,4 +41,8 @@ public interface BookService {
     PageResultSet getBooksByClassSortByWordCount(PageReq page, String selKey);
 
     PageResultSet getBooksByClassSortByScore(PageReq page, String selKey);
+
+    List<BookDO> getRandomBooks(int[] randomBookId);
+
+    List<BookDO> getHotBooks();
 }

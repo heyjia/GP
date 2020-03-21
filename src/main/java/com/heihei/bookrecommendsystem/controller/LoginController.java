@@ -1,6 +1,7 @@
 package com.heihei.bookrecommendsystem.controller;
 
 import com.heihei.bookrecommendsystem.entity.BookClassDO;
+import com.heihei.bookrecommendsystem.entity.BookDO;
 import com.heihei.bookrecommendsystem.entity.EmailDO;
 import com.heihei.bookrecommendsystem.entity.UserDO;
 import com.heihei.bookrecommendsystem.entity.form.EmailForm;
@@ -100,14 +101,36 @@ public class LoginController {
         for (BookClassDO bookClass : allBookClass) {
             System.out.println(bookClass.toString());
         }
+        int [] randomBookId = new int [8];
+        for (int i = 0;i < randomBookId.length;i++) {
+            randomBookId[i] = (int)(Math.random() * 10000 + 1);
+        }
+        //获取随机推荐图书
+        List<BookDO> randomBooks = bookService.getRandomBooks(randomBookId);
+        for (int i = 0 ; i < randomBooks.size();i++) {
+            BookDO bookDO = randomBooks.get(i);
+            logger.info("随机推荐：" + bookDO.toString());
+            if (bookDO.getName().length() > 10) {
+               bookDO.setName(bookDO.getName().substring(0,10) + "...");
+            }
+        }
+        //获取热门图书
+        List<BookDO> hotBooks = bookService.getHotBooks();
+        for (BookDO bookDO : hotBooks) {
+            logger.info("热门图书：" + bookDO.toString());
+            if (bookDO.getName().length() > 10) {
+                bookDO.setName(bookDO.getName().substring(0,10) + "...");
+            }
+        }
         model.addAttribute("u",userDO);
         model.addAttribute("class",allBookClass);
+        model.addAttribute("randomBooks",randomBooks);
+        model.addAttribute("hotBooks",hotBooks);
         logger.info("toLogin方法：前往首页");
         return "index";
     }
 
     //注册
-
     @RequestMapping(value = "/register")
     @ResponseBody
     public Result<Boolean> register(UserForm userForm) {

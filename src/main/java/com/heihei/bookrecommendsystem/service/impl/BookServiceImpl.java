@@ -164,6 +164,18 @@ public class BookServiceImpl implements BookService {
         return pageResultSet;
     }
 
+    @Override
+    public List<BookDO> getRandomBooks(int[] randomBookId) {
+        List<BookDO> books = bookMapper.getRandomBooks(randomBookId);
+        return books;
+    }
+
+    @Override
+    public List<BookDO> getHotBooks() {
+        List<BookDO> books = bookMapper.getHotBooks();
+        return books;
+    }
+
     private PageResultSet getPageResultSet(Page<BookAndClassVO> vos) {
         PageInfo<BookAndClassVO> voList = vos.toPageInfo();
         PageResultSet pageResultSet = new PageResultSet();
