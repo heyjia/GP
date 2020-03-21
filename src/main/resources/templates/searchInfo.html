@@ -27,10 +27,10 @@
         </div>
         <div class = "row">
             <div class = "col-md-1">
-                <button id = "sortByScoreBtn" class = "btn btn-primary" type="button" th:onclick="sortByScore([[${pages.page}]],[[${pages.limit}]],[[${key}]],'score')">评分排序</button>
+                <button id = "sortByScoreBtn" class = "btn btn-primary" type="button" th:onclick="sortByScore([[${pages.page}]],[[${pages.limit}]],[[${key}]],'score',[[${serachType}]])">评分排序</button>
             </div>
             <div class = "col-md-1">
-                <button id = "sortByWordsCountBtn" class = "btn btn-primary" type="button" th:onclick="sortByScore([[${pages.page}]],[[${pages.limit}]],[[${key}]],'wordCount')">字数排序</button>
+                <button id = "sortByWordsCountBtn" class = "btn btn-primary" type="button" th:onclick="sortByScore([[${pages.page}]],[[${pages.limit}]],[[${key}]],'wordCount',[[${serachType}]])">字数排序</button>
             </div>
         </div>
         <br/>
@@ -91,8 +91,8 @@
         location.href="/book/searchBook?selKey=" + key + "&page=" + page + "&limit=" + limit;
     }
 
-    function sortByScore(page,limit,key,type) {
-        location.href="/book/searchBook?selKey=" + key + "&page=" + page + "&limit=" + limit + "&sortType=" + type;
+    function sortByScore(page,limit,key,type,searchType) {
+        location.href="/book/searchBook?selKey=" + key + "&page=" + page + "&limit=" + limit + "&sortType=" + type + "&searchType=" + searchType;
     }
 </script>
 

@@ -17,7 +17,7 @@
     <div class="col-md-2">
         <h4 class="text-center">分类</h4>
         <ul class="nav" th:each="c : ${class}">
-            <li th:value="${c.id}"><a th:text = "${c.name}" style="list-style-type:none"></a></li>
+            <li th:value="${c.id}"><a th:text = "${c.name}" style="list-style-type:none" th:href="'/book/searchBook?selKey=' + ${c.name} + '&page=1&limit=5&searchType=class'"></a></li>
         </ul>
 </div>
 </div>

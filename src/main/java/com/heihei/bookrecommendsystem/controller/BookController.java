@@ -7,6 +7,7 @@ import com.heihei.bookrecommendsystem.entity.vo.UserRatingBookDetailVO;
 import com.heihei.bookrecommendsystem.result.CodeMsg;
 import com.heihei.bookrecommendsystem.result.Result;
 import com.heihei.bookrecommendsystem.service.BookService;
+import com.heihei.bookrecommendsystem.util.ChartDataJsonCreater;
 import com.heihei.bookrecommendsystem.util.PageReq;
 import com.heihei.bookrecommendsystem.util.PageResultSet;
 import org.slf4j.Logger;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.util.List;
 
 @Controller
@@ -69,7 +72,7 @@ public class BookController {
 
     @RequestMapping(value = "/searchBook")
     public String searchBook(Model model, UserDO userDO,String selKey,PageReq page,String sortType,String searchType) {
-        logger.info("sortType:" + searchType);
+        logger.info("searchType:" + searchType);
         logger.info(sortType);
         logger.info(page.toString());
         logger.info(selKey);
@@ -85,27 +88,85 @@ public class BookController {
                     pageResultSet = bookService.getBooksBySelKey(page,selKey);
                 }
             }
-        }else{
-            if ("score".equalsIgnoreCase(sortType)) {
-                pageResultSet = bookService.getBooksByBookNameSortByScore(page,selKey);
-            }else{
-                if ("wordCount".equalsIgnoreCase(sortType)) {
-                    pageResultSet = bookService.getBooksByBookNameSortByWordCount(page,selKey);
+        }else if ("class".equalsIgnoreCase(searchType)) {
+                if ("class".equalsIgnoreCase(sortType)) {
+                    pageResultSet = bookService.getBooksByClassSortByScore(page,selKey);
                 }else{
-                    pageResultSet = bookService.getBooksByBookName(page,selKey);
+                    if ("wordCount".equalsIgnoreCase(sortType)) {
+                        pageResultSet = bookService.getBooksByClassSortByWordCount(page,selKey);
+                    }else{
+                        pageResultSet = bookService.getBooksByClass(page,selKey);
+                    }
+                }
+        }else{
+                if ("score".equalsIgnoreCase(sortType)) {
+                    pageResultSet = bookService.getBooksByBookNameSortByScore(page,selKey);
+                }else{
+                    if ("wordCount".equalsIgnoreCase(sortType)) {
+                        pageResultSet = bookService.getBooksByBookNameSortByWordCount(page,selKey);
+                    }else{
+                        pageResultSet = bookService.getBooksByBookName(page,selKey);
+                    }
                 }
             }
-        }
         List<BookAndClassVO> vos = (List<BookAndClassVO>)pageResultSet.getDataList();
         for (BookAndClassVO vo : vos) {
             logger.info("vo:" + vo.toString());
         }
-     //   Integer bookNum = bookService.countBookBySelKey(selKey);
         SearchBookVO vo = new SearchBookVO();
         model.addAttribute("key",selKey);
         model.addAttribute("u",userDO);
         model.addAttribute("pages",pageResultSet);
-     //   model.addAttribute("count",bookNum);
+        model.addAttribute("serachType" ,searchType);
         return "searchInfo";
+    }
+
+    @RequestMapping(value = "/ratingList/getBookCountPieChartData")
+    public void getBookCountPieChartData(Integer bookId, HttpServletResponse response) {
+        List<UserRatingBookDetailVO> list = bookService.getAllBooksRateByBookId(bookId);
+        double [] data = {0,0,0,0,0};
+        for (UserRatingBookDetailVO vo : list) {
+            float score = vo.getScore();
+            if (score > 4.0) {
+                data[4]++;
+            }else if (score > 3.0) {
+                data[3]++;
+            }else if (score > 2.0) {
+                data[2]++;
+            }else if (score > 1.0) {
+                data[1]++;
+            }else{
+                data[0]++;
+            }
+        }
+        for (double d : data) {
+            logger.info(d + "");
+        }
+        String[] backgroundColor = {
+                "rgba(255, 99, 132, 0.7)", // Red
+                "rgba(255, 159, 64, 0.7)", // Orange
+                "rgba(255, 205, 86, 0.7)", // Yellow
+                "rgba(75, 192, 192, 0.7)", // Green
+                "rgba(54, 162, 235, 0.7)"}; // Blue
+        String[] labels = {
+                "很差",
+                "较差",
+                "还行",
+                "推荐",
+                "力荐"
+        };
+        String json;
+        try {
+            json = ChartDataJsonCreater.getPieJson(data,backgroundColor,labels,"各评分人数占比饼图","left");
+            logger.info(json);
+            response.setCharacterEncoding("UTF-8"); //设置编码格式
+            response.setContentType("text/html; charset=utf-8");//设置数据格式
+            PrintWriter out = response.getWriter(); //获取写入对象
+            out.print(json); //将json数据写入流中
+            out.flush();
+        }catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
     }
 }

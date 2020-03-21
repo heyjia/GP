@@ -28,4 +28,13 @@ public interface BookMapper extends BaseMapper<BookDO> {
 
     @Select("SELECT b.*,bc.`name` className FROM book b,book_class bc WHERE b.`classify_main_id` = bc.`id` AND b.name LIKE CONCAT('%',#{selKey},'%')")
     List<BookAndClassVO> getBooksByBookName(String selKey);
+
+    @Select("SELECT b.*,bc.`name` className FROM book b,book_class bc WHERE b.`classify_main_id` = bc.`id` AND bc.`name` = #{selKey}")
+    List<BookAndClassVO> getBooksByClass(String selKey);
+
+    @Select("SELECT b.*,bc.`name` className FROM book b,book_class bc WHERE b.`classify_main_id` = bc.`id` AND bc.`name` = #{selKey} ORDER BY b.`words_count` DESC")
+    List<BookAndClassVO> getBooksByClassSortByWordCount(String selKey);
+
+    @Select("SELECT b.*,bc.`name` className FROM book b,book_class bc WHERE b.`classify_main_id` = bc.`id` AND bc.`name` = #{selKey} ORDER BY b.`avg_rating_val` DESC")
+    List<BookAndClassVO> getBooksByClassSortByScore(String selKey);
 }

@@ -15,6 +15,8 @@
     <script type="text/javascript" th:src="@{/js/common.js}"></script>
     <script type="text/javascript" th:src="@{/js/jsencrypt.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/star-rating.min.js}"></script>
+    <script type="text/javascript" th:src="@{/chart/Chart.js}"></script>
+    <script type="text/javascript" th:src="@{/chart/Chart.bundle.js}"></script>
 </head>
 <script>
 
@@ -25,7 +27,7 @@
     </div>
     <ol class = "breadcrumb">
         <li><a href = "http://localhost:8080/login/toIndex">主页</a></li>
-        <li><a href = "#" th:text="${class.name}"></a></li>
+        <li><a href = "#" th:text="${class.name}" th:href="'/book/searchBook?selKey=' + ${class.name} + '&page=1&limit=5&searchType=class'"></a></li>
     </ol>
     <div class = "panel panel-default">
         <div class = "panel-heading">
@@ -63,7 +65,18 @@
                 <h3 class = "panel-title">评分数据图表</h3>
             </div>
             <div class = "panel-body">
-
+                <div class ="col-xs-6">
+                    <!--饼图-->
+                    <div id = "canvas-holder" style="width: 100%">
+                        <canvas id = "chartAreaPie" />
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <!-- 雷达图 -->
+                    <div id="canvas-holder-1" style="width:100%">
+                        <canvas id="reviewCountAdvance-Chart"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
         <div class = "panel panel-default">
@@ -127,6 +140,7 @@
 </body>
 <script>
     var avgScore = $("#ratingAvgValue").val();
+    var bookId = $("#bookId").val();
     if (avgScore <= 1) {
         $("#ratingValue").val(0.5);
     }else if (avgScore <= 2) {
@@ -211,5 +225,29 @@
         page = page + 1;
         location.href="/book/toInfo?bookId=" + bookId + "&page=" + page + "&limit=" + limit;
     }
+    function getPie() {
+        // 初始化
+        var ctx = document.getElementById("chartAreaPie").getContext("2d");
+        //获取数据
+        $.ajax({
+            url:"/book/ratingList/getBookCountPieChartData",
+            type:"get",
+            data:
+                {
+                    bookId:bookId
+                },
+            dataType:"json",
+            success:function (data) {
+                window.myPie = new Chart(ctx,data);
+                console.log(data);
+            },
+            error:function () {
+                layer.alert("画饼获取数据失败");
+            }
+        });
+    }
+    $(document).on('ready',function () {
+        setTimeout(getPie, 10);
+    })
 </script>
 </html>

@@ -134,6 +134,36 @@ public class BookServiceImpl implements BookService {
         return pageResultSet;
     }
 
+    @Override
+    public List<UserRatingBookDetailVO> getAllBooksRateByBookId(Integer bookId) {
+        List<UserRatingBookDetailVO> list = userBookScoreMapper.getAllBookRateByBookId(bookId);
+        return list;
+    }
+
+    @Override
+    public PageResultSet getBooksByClass(PageReq page, String selKey) {
+        PageHelper.startPage(page.getPage(),page.getLimit());
+        Page<BookAndClassVO> vos = (Page<BookAndClassVO>)bookMapper.getBooksByClass(selKey);
+        PageResultSet pageResultSet = getPageResultSet(vos);
+        return pageResultSet;
+    }
+
+    @Override
+    public PageResultSet getBooksByClassSortByWordCount(PageReq page, String selKey) {
+        PageHelper.startPage(page.getPage(),page.getLimit());
+        Page<BookAndClassVO> vos = (Page<BookAndClassVO>)bookMapper.getBooksByClassSortByWordCount(selKey);
+        PageResultSet pageResultSet = getPageResultSet(vos);
+        return pageResultSet;
+    }
+
+    @Override
+    public PageResultSet getBooksByClassSortByScore(PageReq page, String selKey) {
+        PageHelper.startPage(page.getPage(),page.getLimit());
+        Page<BookAndClassVO> vos = (Page<BookAndClassVO>)bookMapper.getBooksByClassSortByScore(selKey);
+        PageResultSet pageResultSet = getPageResultSet(vos);
+        return pageResultSet;
+    }
+
     private PageResultSet getPageResultSet(Page<BookAndClassVO> vos) {
         PageInfo<BookAndClassVO> voList = vos.toPageInfo();
         PageResultSet pageResultSet = new PageResultSet();

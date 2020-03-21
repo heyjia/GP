@@ -33,4 +33,12 @@ public interface BookService {
     PageResultSet getBooksByBookNameSortByWordCount(PageReq page, String selKey);
 
     PageResultSet getBooksByBookName(PageReq page, String selKey);
+
+    List<UserRatingBookDetailVO> getAllBooksRateByBookId(Integer bookId);
+
+    PageResultSet getBooksByClass(PageReq page, String selKey);
+
+    PageResultSet getBooksByClassSortByWordCount(PageReq page, String selKey);
+
+    PageResultSet getBooksByClassSortByScore(PageReq page, String selKey);
 }
