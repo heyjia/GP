@@ -123,6 +123,12 @@
       <artifactId>pagehelper-spring-boot-starter</artifactId>
       <version>${pagehelper.version}</version>
     </dependency>
+<!--    爬虫插件jsoup-->
+    <dependency>
+      <groupId>org.jsoup</groupId>
+      <artifactId>jsoup</artifactId>
+      <version>1.11.3</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
