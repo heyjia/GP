@@ -151,6 +151,7 @@ public class BookInfoSpider implements Runnable{
                 preparedStatement.setInt(15,0);
                 preparedStatement.setString(16,book.getBack());
                 preparedStatement.executeUpdate();
+                System.out.println("爬取图书成功：" + book.toString());
             }catch (SQLException e) {
                 curRetryTimes++;
                 e.printStackTrace();
