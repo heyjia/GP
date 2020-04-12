@@ -21,9 +21,9 @@ import java.util.*;
 public class RecommandJob {
     public static void timerJob() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR,11);
-        calendar.set(Calendar.MINUTE,34);
-        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.HOUR,21);
+        calendar.set(Calendar.MINUTE,40);
+        calendar.set(Calendar.SECOND,50);
         Date time = calendar.getTime();
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -74,6 +74,6 @@ public class RecommandJob {
         }
     }
     public static void main(String []args) {
-        timerJob();
+        recommend();
     }
 }

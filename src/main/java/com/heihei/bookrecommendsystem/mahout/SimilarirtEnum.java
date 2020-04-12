@@ -1,0 +1,5 @@
+package com.heihei.bookrecommendsystem.mahout;
+
+public enum SimilarirtEnum {
+    PEARSON,EUCLIDEAN,COSINE,TANIMOTO,LOGLIKELIHOOD,SPEARMAN,CITYBLOCK,FARTHEST_NEIGHBOR_CLUSTER, NEAREST_NEIGHBOR_CLUSTER
+}
