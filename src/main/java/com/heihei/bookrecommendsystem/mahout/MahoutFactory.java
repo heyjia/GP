@@ -56,7 +56,7 @@ public class MahoutFactory {
         };
     }
 
-    public static UserSimilarity userSimilarity(SimilarirtEnum type,DataModel dataModel) throws TasteException {
+    public static UserSimilarity userSimilarity(SimilarityEnum type, DataModel dataModel) throws TasteException {
         switch (type) {
             case PEARSON:
                 //皮尔森相似度
@@ -83,7 +83,7 @@ public class MahoutFactory {
         }
     }
 
-    public static ItemSimilarity itemSimilarity(SimilarirtEnum type, DataModel dataModel) throws TasteException {
+    public static ItemSimilarity itemSimilarity(SimilarityEnum type, DataModel dataModel) throws TasteException {
         switch (type) {
             case PEARSON:
                 return new PearsonCorrelationSimilarity(dataModel);
