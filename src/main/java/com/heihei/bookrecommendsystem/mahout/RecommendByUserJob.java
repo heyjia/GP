@@ -1,6 +1,7 @@
 package com.heihei.bookrecommendsystem.mahout;
 
-import com.heihei.bookrecommendsystem.entity.RecommendDO;
+import com.heihei.bookrecommendsystem.entity.RecommendUserDO;
+import com.heihei.bookrecommendsystem.util.DBConnectionUtil;
 import org.apache.mahout.cf.taste.common.TasteException;
 import org.apache.mahout.cf.taste.eval.RecommenderBuilder;
 import org.apache.mahout.cf.taste.impl.common.LongPrimitiveIterator;
@@ -11,17 +12,21 @@ import org.apache.mahout.cf.taste.recommender.Recommender;
 import org.apache.mahout.cf.taste.similarity.UserSimilarity;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 
 public class RecommendByUserJob {
     public static final double NaN = 0.0d / 0.0;
-    final static int NEIGHBORHOOD_NUM = 4;
-    public static ArrayList<RecommendDO> list = new ArrayList<>();
+    final static int NEIGHBORHOOD_NUM = 5;
+    public static final int RECOMMENT_NUM = 5;
+    public static ArrayList<RecommendUserDO> list = new ArrayList<>();
     public static void main(String[] args) {
        // getDate("D:/GP/BookRecommendSystem/src/main/resources/train3.txt","D:/GP/BookRecommendSystem/src/main/resources/train4.txt");
         recommendBookbyUser();
         System.out.println("长度：" + list.size());
-        for (RecommendDO r : list) {
+        for (RecommendUserDO r : list) {
             System.out.println(r.toString());
         }
     }
@@ -101,24 +106,54 @@ public class RecommendByUserJob {
     }
 
     private static void showResultbyUser(DataModel dataModel, RecommenderBuilder recommenderBuilder) throws TasteException {
+        int count = 0;
         Recommender recommender = recommenderBuilder.buildRecommender(dataModel);
         LongPrimitiveIterator usersIterator = dataModel.getUserIDs();
         while (usersIterator.hasNext()) {
             System.out.println("========================================");
             Long userId = usersIterator.nextLong();
             System.out.println("用户Id："+userId);
-            List<RecommendedItem> recommendItems = recommender.recommend(userId, 5);
+            List<RecommendedItem> recommendItems = recommender.recommend(userId, RECOMMENT_NUM);
             if (recommendItems == null || recommendItems.size() == 0) {
                 System.out.println("无书籍推荐");
             }else{
-                for (RecommendedItem item : recommendItems) {
-                    System.out.println("给用户ID为" + userId + " 推荐商品ID为" + item.getItemID() + " 推荐值为:" + item.getValue());
-                    RecommendDO r = new RecommendDO();
-                    r.setBookId(item.getItemID());
-                    r.setUserId(userId);
-                    r.setScore(item.getValue());
-                    list.add(r);
-                    //如果有推荐，就在推荐表中判断是否推荐的值是否存在，如果存在就更行value,不存在就插入，用JDBC的方式
+                Connection conn = null;
+                try {
+                    conn = DBConnectionUtil.getConn();
+                    for (RecommendedItem item : recommendItems) {
+                        System.out.println("给用户ID为" + userId + " 推荐商品ID为" + item.getItemID() + " 推荐值为:" + item.getValue());
+                        RecommendUserDO r = new RecommendUserDO();
+                        r.setBookId(item.getItemID());
+                        r.setUserId(userId);
+                        r.setval(item.getValue());
+                        list.add(r);
+                        String sql = "INSERT INTO recommend_user(user_id,book_id,val) VALUES(?,?,?)";
+                        PreparedStatement preparedStatement = conn.prepareStatement(sql);
+                        preparedStatement.setLong(1,r.getUserId());
+                        preparedStatement.setLong(2,r.getBookId());
+                        preparedStatement.setFloat(3,r.getval());
+                        preparedStatement.executeUpdate();
+                        count++;
+                        //如果有推荐，就在推荐表中判断是否推荐的值是否存在，如果存在就更行value,不存在就插入，用JDBC的方式
+                    }
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }finally {
+                    System.out.println("基于用户的推荐线程结束，总推荐数量:" + count);
+                    if (conn != null) {
+                        try {
+                            conn.close();
+                        }catch (Exception e) {
+                            System.out.println("关闭数据库连接异常");
+                            e.printStackTrace();
+                        }
+                    }
                 }
             }
         }

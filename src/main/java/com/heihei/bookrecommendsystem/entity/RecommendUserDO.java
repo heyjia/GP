@@ -2,21 +2,21 @@ package com.heihei.bookrecommendsystem.entity;
 
 import javax.persistence.Table;
 
-@Table(name = "recommend")
-public class RecommendDO {
+@Table(name = "recommend_user")
+public class RecommendUserDO {
     private Long id;
     private Long userId;
     private Long bookId;
-    private Float score;
+    private Float val;
 
-    public RecommendDO() {
+    public RecommendUserDO() {
     }
 
-    public RecommendDO(Long id, Long userId, Long bookId, Float score) {
+    public RecommendUserDO(Long id, Long userId, Long bookId, Float val) {
         this.id = id;
         this.userId = userId;
         this.bookId = bookId;
-        this.score = score;
+        this.val = val;
     }
 
     public Long getId() {
@@ -43,12 +43,12 @@ public class RecommendDO {
         this.bookId = bookId;
     }
 
-    public Float getScore() {
-        return score;
+    public Float getval() {
+        return val;
     }
 
-    public void setScore(Float score) {
-        this.score = score;
+    public void setval(Float val) {
+        this.val = val;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class RecommendDO {
                 "id=" + id +
                 ", userId=" + userId +
                 ", bookId=" + bookId +
-                ", score=" + score +
+                ", val=" + val +
                 '}';
     }
 }
