@@ -67,6 +67,12 @@ public class BookController {
         if (num <= 0) {
             return Result.error(CodeMsg.SYSTEM_ERROR);
         }
+        //更新用户平均分和评论人数
+        num = 0;
+        num = bookService.updateAvgAndCount(userBookScore.getBookId());
+        if (num <= 0) {
+            return Result.error(CodeMsg.SYSTEM_ERROR);
+        }
         return Result.success(true);
     }
 

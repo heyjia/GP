@@ -8,13 +8,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BookRateCountCalculator {
-    private static final int BOOK_NUM = 56197;
+    private static final int BOOK_NUM = 56274;
     public static void main(String[] args) {
         Connection conn = null;
         int count = 0;
         try {
             conn = DBConnectionUtil.getConn();
-            int bookId = 1;
+            int bookId = 56198;
             for (;bookId <= BOOK_NUM;bookId++) {
                 String sql = "SELECT COUNT(1) countNum FROM user_book_score u WHERE u.`book_id` = ?";
                 PreparedStatement preparedStatement1 = conn.prepareStatement(sql);

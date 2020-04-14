@@ -219,6 +219,21 @@ public class BookServiceImpl implements BookService {
         return recommentBookList;
     }
 
+    @Override
+    public Integer updateAvgAndCount(Integer bookId) {
+        BookDO book = getBookByBookId(bookId);
+        if (book == null) {
+            return 0;
+        }
+        int count = book.getRateCount();
+        book.setRateCount(++count);
+        //获得平均分
+        Double avgScore = bookMapper.getAvgScoreByBookId(bookId);
+        System.out.println("平均分：" + avgScore);
+        book.setAvgRatingVal(avgScore);
+        return bookMapper.updateByPrimaryKey(book);
+    }
+
     private PageResultSet getPageResultSet(Page<BookAndClassVO> vos) {
         PageInfo<BookAndClassVO> voList = vos.toPageInfo();
         PageResultSet pageResultSet = new PageResultSet();

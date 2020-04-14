@@ -37,16 +37,14 @@ public class BookAndClassVO {
 
     private Integer classifyMainId;
 
-    private Integer reviewCount;
-
-    private String back;
+    private Integer rateCount;
 
     private String className;
 
     public BookAndClassVO() {
     }
 
-    public BookAndClassVO(Integer id, String ISBN, String name, String author, String translator, String category, String publishHourse, String provider, Integer wordsCount, String imgAddr, String infoAddr, String scoreAddr, String bookInfo, Double avgRatingVal, Integer classifyMainId, Integer reviewCount, String back, String className) {
+    public BookAndClassVO(Integer id, String ISBN, String name, String author, String translator, String category, String publishHourse, String provider, Integer wordsCount, String imgAddr, String infoAddr, String scoreAddr, String bookInfo, Double avgRatingVal, Integer classifyMainId, Integer rateCount, String className) {
         this.id = id;
         this.ISBN = ISBN;
         this.name = name;
@@ -62,8 +60,7 @@ public class BookAndClassVO {
         this.bookInfo = bookInfo;
         this.avgRatingVal = avgRatingVal;
         this.classifyMainId = classifyMainId;
-        this.reviewCount = reviewCount;
-        this.back = back;
+        this.rateCount = rateCount;
         this.className = className;
     }
 
@@ -187,20 +184,12 @@ public class BookAndClassVO {
         this.classifyMainId = classifyMainId;
     }
 
-    public Integer getReviewCount() {
-        return reviewCount;
+    public Integer getRateCount() {
+        return rateCount;
     }
 
-    public void setReviewCount(Integer reviewCount) {
-        this.reviewCount = reviewCount;
-    }
-
-    public String getBack() {
-        return back;
-    }
-
-    public void setBack(String back) {
-        this.back = back;
+    public void setRateCount(Integer rateCount) {
+        this.rateCount = rateCount;
     }
 
     public String getClassName() {
@@ -229,8 +218,7 @@ public class BookAndClassVO {
                 ", bookInfo='" + bookInfo + '\'' +
                 ", avgRatingVal=" + avgRatingVal +
                 ", classifyMainId=" + classifyMainId +
-                ", reviewCount=" + reviewCount +
-                ", back='" + back + '\'' +
+                ", rateCount=" + rateCount +
                 ", className='" + className + '\'' +
                 '}';
     }

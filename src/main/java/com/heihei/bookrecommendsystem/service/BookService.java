@@ -49,4 +49,6 @@ public interface BookService {
     List<BookDO> getRecommendBookByItemByBookId(Integer bookId);
 
     List<BookDO> getRecommendBookByUserByUserId(Integer userId);
+
+    Integer updateAvgAndCount(Integer bookId);
 }
