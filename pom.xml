@@ -102,12 +102,11 @@
       <artifactId>commons-email</artifactId>
       <version>1.4</version>
     </dependency>
-    <!--mahout-->
-    <dependency>
-      <groupId>org.apache.mahout</groupId>
-      <artifactId>mahout-core</artifactId>
-      <version>${mahout.version}</version>
-    </dependency>
+<!--    &lt;!&ndash;mahout&ndash;&gt;-->
+<!--    <dependency>-->
+<!--      <groupId>org.apache.mahout</groupId>-->
+<!--      <artifactId>mahout-core</artifactId>-->
+<!--    </dependency>-->
     <dependency>
       <groupId>org.apache.mahout</groupId>
       <artifactId>mahout-integration</artifactId>
