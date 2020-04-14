@@ -1,7 +1,9 @@
 package com.heihei.bookrecommendsystem.service.impl;
 
+import com.heihei.bookrecommendsystem.dao.UserFavoriteMapper;
 import com.heihei.bookrecommendsystem.dao.UserMapper;
 import com.heihei.bookrecommendsystem.entity.UserDO;
+import com.heihei.bookrecommendsystem.entity.UserFavoriteDO;
 import com.heihei.bookrecommendsystem.entity.form.UpdateUserForm;
 import com.heihei.bookrecommendsystem.entity.form.UserForm;
 import com.heihei.bookrecommendsystem.service.UserService;
@@ -14,12 +16,16 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
     Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    private UserFavoriteMapper userFavoriteMapper;
     @Override
     public UserDO getOneUserByUserName(String userName) {
         UserDO query = new UserDO();
@@ -70,6 +76,15 @@ public class UserServiceImpl implements UserService {
         logger.info("更新后的用户信息:" + user.toString());
         user.setBirthday(format.parse(form.getBirthday()));
         int num = userMapper.updateByPrimaryKeySelective(user);
+        //更新用户喜好种类
+        UserFavoriteDO del = new UserFavoriteDO();
+        del.setUserId(user.getId());
+        userFavoriteMapper.delete(del);
+        //添加用户喜好种类
+        UserFavoriteDO add = new UserFavoriteDO();
+        add.setUserId(user.getId());
+        add.setBookClassId(form.getLike());
+        userFavoriteMapper.insert(add);
         return num > 0;
     }
 
@@ -79,5 +94,13 @@ public class UserServiceImpl implements UserService {
         user.setPassword(npswd);
         int num = userMapper.updateByPrimaryKeySelective(user);
         return num > 0;
+    }
+
+    @Override
+    public List<UserFavoriteDO> getFavoriteByUserId(Integer userId) {
+        UserFavoriteDO query = new UserFavoriteDO();
+        query.setUserId(userId);
+        List<UserFavoriteDO> list = userFavoriteMapper.select(query);
+        return list;
     }
 }

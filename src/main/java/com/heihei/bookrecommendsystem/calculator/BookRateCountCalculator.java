@@ -14,7 +14,7 @@ public class BookRateCountCalculator {
         int count = 0;
         try {
             conn = DBConnectionUtil.getConn();
-            int bookId = 56198;
+            int bookId = 1;
             for (;bookId <= BOOK_NUM;bookId++) {
                 String sql = "SELECT COUNT(1) countNum FROM user_book_score u WHERE u.`book_id` = ?";
                 PreparedStatement preparedStatement1 = conn.prepareStatement(sql);

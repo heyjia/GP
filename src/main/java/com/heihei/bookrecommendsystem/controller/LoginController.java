@@ -123,6 +123,9 @@ public class LoginController {
             }
         }
         List<BookDO> recommenrBookList = bookService.getRecommendBookByUserByUserId(userDO.getId());
+        //选择用户偏好图书
+        List<BookDO> favoriteBookList = bookService.getFavoriteBookByUserId(userDO.getId());
+        model.addAttribute("favoriteBookList",favoriteBookList);
         model.addAttribute("recommendBookList",recommenrBookList);
         model.addAttribute("u",userDO);
         model.addAttribute("class",allBookClass);

@@ -68,6 +68,46 @@
                 </div>
             </div>
 
+            <h3>猜你喜欢</h3>
+            <hr />
+            <div class="panel panel-default">
+                <div class = "panel-body">
+                    <p th:if="${#lists.isEmpty(recommendBookList)}">用户评分数据较少,请先进行浏览书籍进行评论</p>
+                    <div th:each="recommendBook:${recommendBookList}" th:if="${not #lists.isEmpty(recommendBookList)}">
+                        <div class="col-md-3" style="width: 20%;" id="recommendBookDiv">
+                            <div class="panel panel-default">
+                                <div style="margin:0px auto">
+                                    <img width="100%" th:src="${recommendBook.imgAddr}">
+                                    <a id="recommendBookName" th:href = "'/book/toInfo?bookId=' + ${recommendBook.id} + '&page=1&limit=5'" th:text="${recommendBook.name}"></a>
+                                    <p id="recommendBookAuthor" th:text="${recommendBook.author}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>来自你感兴趣的分区</h3>
+            <hr />
+            <div class="panel panel-default">
+                <div class = "panel-body">
+                    <p th:if="${#lists.isEmpty(favoriteBookList)}">
+                        用户暂未设置偏好，请前往
+                        <a href="http://localhost:8080/person/toCenter">个人中心</a>设置用户偏好</p>
+                    <div th:each="recommendBook:${favoriteBookList}" th:if="${not #lists.isEmpty(favoriteBookList)}">
+                        <div class="col-md-3" style="width: 20%;" id="recommendBookDiv2">
+                            <div class="panel panel-default">
+                                <div style="margin:0px auto">
+                                    <img width="100%" th:src="${recommendBook.imgAddr}">
+                                    <a id="recommendBookName2" th:href = "'/book/toInfo?bookId=' + ${recommendBook.id} + '&page=1&limit=5'" th:text="${recommendBook.name}"></a>
+                                    <p id="recommendBookAuthor2" th:text="${recommendBook.author}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <h3>热门图书</h3>
             <hr />
             <div class="panel panel-default">
@@ -87,43 +127,7 @@
                         </div>
                     </div>
                 </div>
-            <h3>来自你感兴趣的分区</h3>
-            <hr />
-            <div class="panel panel-default">
-                <div class = "panel-body">
-                    <p th:if="${#lists.isEmpty(recommendBookList)}">用户评分数据较少,请先进行评论</p>
-                    <div th:each="recommendBook:${recommendBookList}" th:if="${not #lists.isEmpty(recommendBookList)}">
-                        <div class="col-md-3" style="width: 20%;" id="recommendBookDiv2">
-                            <div class="panel panel-default">
-                                <div style="margin:0px auto">
-                                    <img width="100%" th:src="${recommendBook.imgAddr}">
-                                    <a id="recommendBookName2" th:href = "'/book/toInfo?bookId=' + ${recommendBook.id} + '&page=1&limit=5'" th:text="${recommendBook.name}"></a>
-                                    <p id="recommendBookAuthor2" th:text="${recommendBook.author}"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <h3>猜你喜欢</h3>
-            <hr />
-            <div class="panel panel-default">
-                <div class = "panel-body">
-                    <p th:if="${#lists.isEmpty(recommendBookList)}">用户评分数据较少,请先进行评论</p>
-                    <div th:each="recommendBook:${recommendBookList}" th:if="${not #lists.isEmpty(recommendBookList)}">
-                        <div class="col-md-3" style="width: 20%;" id="recommendBookDiv">
-                            <div class="panel panel-default">
-                                <div style="margin:0px auto">
-                                    <img width="100%" th:src="${recommendBook.imgAddr}">
-                                    <a id="recommendBookName" th:href = "'/book/toInfo?bookId=' + ${recommendBook.id} + '&page=1&limit=5'" th:text="${recommendBook.name}"></a>
-                                    <p id="recommendBookAuthor" th:text="${recommendBook.author}"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             </div>
 
 

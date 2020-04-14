@@ -20,6 +20,7 @@
 
 <body>
 <div class="container">
+    <input id = "likeValue" th:type="hidden" th:value="${like}"/>
     <div th:include="include/head::nav">
     </div>
     <div class = "row">
@@ -46,6 +47,17 @@
                                 <label class="form-label col-md-3">密码 </label>
                                 <div class="col-md-8">
                                     <button class="btn btn-block btn-info"  type="button" data-toggle="modal" data-target="#updatePswd">修改密码</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="form-label col-md-3">偏好种类 </label>
+                                <div class="col-md-8">
+                                    <select name = "selectLike" id = "selectLike" class="form-control">
+                                        <option th:value="0">--请选择偏好--</option>
+                                        <option th:each="bookClass:${classList}" th:value="${bookClass.id}" th:text="${bookClass.name}"></option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -153,6 +165,8 @@
 </div>
 </body>
 <script>
+    var likeValue = $("#likeValue").val();
+    $("#selectLike").val(likeValue);
     $(function() {
         $("#updateUserForm").bootstrapValidator({
             live: 'enabled',
@@ -223,6 +237,7 @@
         $("#updateUserBtn").click(function () { //非submit按钮点击后进行验证，如果是submit则无需此句直接验证
             $("#updateUserForm").bootstrapValidator('validate'); //提交验证
             if ($("#updateUserForm").data('bootstrapValidator').isValid()) { //获取验证结果，如果成功，执行下面代码
+                    var like = $("#selectLike").val();
                     var userId = $("#userId").val();
                     var userName = $("#uname").val();
                     var email = $("#email").val();
@@ -240,7 +255,8 @@
                             sex:sex,
                             birthday:birthday,
                             age:age,
-                            address:address
+                            address:address,
+                            like:like
                         },
                         success:function (data) {
                             if (data.code == 0) {

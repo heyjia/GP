@@ -36,6 +36,9 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     private RecommendUserMapper recommendUserMapper;
+
+    @Autowired
+    private UserFavoriteMapper userFavoriteMapper;
     @Override
     public List<BookClassDO> getAllBookClass() {
         return bookClassMapper.selectAll();
@@ -232,6 +235,23 @@ public class BookServiceImpl implements BookService {
         System.out.println("平均分：" + avgScore);
         book.setAvgRatingVal(avgScore);
         return bookMapper.updateByPrimaryKey(book);
+    }
+
+    @Override
+    public List<BookDO> getFavoriteBookByUserId(Integer userId) {
+        List<BookDO> list = null;
+        UserFavoriteDO query = new UserFavoriteDO();
+        query.setUserId(userId);
+        List<UserFavoriteDO> userFavoriteList = userFavoriteMapper.select(query);
+        if (userFavoriteList == null || userFavoriteList.size() == 0) {
+            return list;
+        }
+        Integer classId = userFavoriteList.get(0).getBookClassId();
+        list = bookMapper.getBookByClassIdLimit5(classId);
+        for (BookDO b : list) {
+            logger.info("偏好图书：" + b.toString());
+        }
+        return list;
     }
 
     private PageResultSet getPageResultSet(Page<BookAndClassVO> vos) {

@@ -47,4 +47,7 @@ public interface BookMapper extends BaseMapper<BookDO> {
 
     @Select("SELECT AVG(u.`score`) avgScore FROM user_book_score u WHERE u.`book_id` = #{bookId}")
     Double getAvgScoreByBookId(Integer bookId);
+
+    @Select("SELECT * FROM book b WHERE b.`classify_main_id` = #{classId} ORDER BY b.`avg_rating_val` DESC LIMIT 5")
+    List<BookDO> getBookByClassIdLimit5(Integer classId);
 }

@@ -10,11 +10,12 @@ public class UpdateUserForm {
     private String birthday;
     private Integer age;
     private String address;
+    private Integer like;
 
     public UpdateUserForm() {
     }
 
-    public UpdateUserForm(String userId, String userName, String email, Integer sex, String birthday, Integer age, String address) {
+    public UpdateUserForm(String userId, String userName, String email, Integer sex, String birthday, Integer age, String address, Integer like) {
         this.userId = userId;
         this.userName = userName;
         this.email = email;
@@ -22,6 +23,7 @@ public class UpdateUserForm {
         this.birthday = birthday;
         this.age = age;
         this.address = address;
+        this.like = like;
     }
 
     public String getUserId() {
@@ -80,16 +82,25 @@ public class UpdateUserForm {
         this.address = address;
     }
 
+    public Integer getLike() {
+        return like;
+    }
+
+    public void setLike(Integer like) {
+        this.like = like;
+    }
+
     @Override
     public String toString() {
-        return "updateUserForm{" +
+        return "UpdateUserForm{" +
                 "userId='" + userId + '\'' +
                 ", userName='" + userName + '\'' +
                 ", email='" + email + '\'' +
                 ", sex=" + sex +
-                ", birthday=" + birthday +
+                ", birthday='" + birthday + '\'' +
                 ", age=" + age +
                 ", address='" + address + '\'' +
+                ", like=" + like +
                 '}';
     }
 }

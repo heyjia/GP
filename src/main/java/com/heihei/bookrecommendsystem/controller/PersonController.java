@@ -2,6 +2,7 @@ package com.heihei.bookrecommendsystem.controller;
 
 import com.heihei.bookrecommendsystem.entity.BookClassDO;
 import com.heihei.bookrecommendsystem.entity.UserDO;
+import com.heihei.bookrecommendsystem.entity.UserFavoriteDO;
 import com.heihei.bookrecommendsystem.entity.form.UpdateUserForm;
 import com.heihei.bookrecommendsystem.result.CodeMsg;
 import com.heihei.bookrecommendsystem.result.Result;
@@ -34,7 +35,14 @@ public class PersonController {
     public String toCenter(UserDO userDO, Model model) {
         logger.info("前往个人中心，用户信息为："+ userDO.toString());
         List<BookClassDO> allBookClass = bookService.getAllBookClass();
-        model.addAttribute("class",allBookClass);
+        //获取用户的偏好
+        List<UserFavoriteDO> userFavoriteList = userService.getFavoriteByUserId(userDO.getId());
+        if (userFavoriteList == null || userFavoriteList.size() == 0) {
+            model.addAttribute("like",0);
+        }else{
+            model.addAttribute("like",userFavoriteList.get(0).getBookClassId());
+        }
+        model.addAttribute("classList",allBookClass);
         model.addAttribute("u",userDO);
         return "PersonalCenter";
     }
