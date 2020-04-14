@@ -40,8 +40,6 @@ public class BookController {
         logger.info("bookId" + bookId);
         logger.info("user:" + userDO.toString());
         BookDO book = bookService.getBookByBookId(bookId);
-        int re = book.getPublishHourse().length();
-        logger.info( re+"");
         logger.info("前往图书详情页面，图书信息为：" + book.toString());
         BookClassDO bookClass = bookService.getBookClassByClassId(book.getClassifyMainId());
         logger.info("前往图书详情页面,图书种类信息为：" + bookClass.toString());
@@ -52,6 +50,8 @@ public class BookController {
         for (UserRatingBookDetailVO vo : vos) {
             logger.info("vo:" + vo.toString());
         }
+        List<BookDO> recommendBookByItemList = bookService.getRecommendBookByItemByBookId(bookId);
+        model.addAttribute("recommendBookList",recommendBookByItemList);
         model.addAttribute("u",userDO);
         model.addAttribute("book",book);
         model.addAttribute("class",bookClass);

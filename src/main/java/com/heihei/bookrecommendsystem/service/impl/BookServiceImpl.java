@@ -3,12 +3,8 @@ package com.heihei.bookrecommendsystem.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.heihei.bookrecommendsystem.dao.BookClassMapper;
-import com.heihei.bookrecommendsystem.dao.BookMapper;
-import com.heihei.bookrecommendsystem.dao.UserBookScoreMapper;
-import com.heihei.bookrecommendsystem.entity.BookClassDO;
-import com.heihei.bookrecommendsystem.entity.BookDO;
-import com.heihei.bookrecommendsystem.entity.UserBookScoreDO;
+import com.heihei.bookrecommendsystem.dao.*;
+import com.heihei.bookrecommendsystem.entity.*;
 import com.heihei.bookrecommendsystem.entity.vo.BookAndClassVO;
 import com.heihei.bookrecommendsystem.entity.vo.UserRatingBookDetailVO;
 import com.heihei.bookrecommendsystem.service.BookService;
@@ -19,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 @Service
@@ -33,6 +30,12 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     private UserBookScoreMapper userBookScoreMapper;
+
+    @Autowired
+    private RecommendItemMapper recommendItemMapper;
+
+    @Autowired
+    private RecommendUserMapper recommendUserMapper;
     @Override
     public List<BookClassDO> getAllBookClass() {
         return bookClassMapper.selectAll();
@@ -174,6 +177,46 @@ public class BookServiceImpl implements BookService {
     public List<BookDO> getHotBooks() {
         List<BookDO> books = bookMapper.getHotBooks();
         return books;
+    }
+
+    @Override
+    public List<BookDO> getRecommendBookByItemByBookId(Integer bookId) {
+        RecommendItemDO query = new RecommendItemDO();
+        query.setBookIdFrom((long)bookId);
+        List<RecommendItemDO> recommendItemList = recommendItemMapper.select(query);
+        List<BookDO> recommentBookList = new ArrayList<>();
+        for (RecommendItemDO r : recommendItemList) {
+            logger.info("喜欢ID为" + r.getBookIdFrom() + "这本书的人还喜欢ID为" + r.getBookIdTo() + "这本书");
+            BookDO queryBook = new BookDO();
+            long id = r.getBookIdTo();
+            queryBook.setId((int)id);
+            BookDO book = bookMapper.selectByPrimaryKey(id);
+            recommentBookList.add(book);
+        }
+        for (BookDO b : recommentBookList) {
+            logger.info("推荐图书信息为:" + b.toString());
+        }
+        return recommentBookList;
+    }
+
+    @Override
+    public List<BookDO> getRecommendBookByUserByUserId(Integer userId) {
+        RecommendUserDO query = new RecommendUserDO();
+        query.setUserId((long)userId);
+        List<RecommendUserDO> recommendUserList = recommendUserMapper.select(query);
+        List<BookDO> recommentBookList = new ArrayList<>();
+        for (RecommendUserDO r : recommendUserList) {
+            logger.info("用户ID为" + r.getUserId() + "还喜欢ID为" + r.getBookId() + "这本书");
+            BookDO queryBook = new BookDO();
+            long id = r.getBookId();
+            queryBook.setId((int)id);
+            BookDO book = bookMapper.selectByPrimaryKey(id);
+            recommentBookList.add(book);
+        }
+        for (BookDO b : recommentBookList) {
+            logger.info("推荐图书信息为:" + b.toString());
+        }
+        return recommentBookList;
     }
 
     private PageResultSet getPageResultSet(Page<BookAndClassVO> vos) {

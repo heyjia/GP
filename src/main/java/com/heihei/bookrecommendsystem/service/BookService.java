@@ -45,4 +45,8 @@ public interface BookService {
     List<BookDO> getRandomBooks(int[] randomBookId);
 
     List<BookDO> getHotBooks();
+
+    List<BookDO> getRecommendBookByItemByBookId(Integer bookId);
+
+    List<BookDO> getRecommendBookByUserByUserId(Integer userId);
 }

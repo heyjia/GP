@@ -122,6 +122,8 @@ public class LoginController {
                 bookDO.setName(bookDO.getName().substring(0,10) + "...");
             }
         }
+        List<BookDO> recommenrBookList = bookService.getRecommendBookByUserByUserId(userDO.getId());
+        model.addAttribute("recommendBookList",recommenrBookList);
         model.addAttribute("u",userDO);
         model.addAttribute("class",allBookClass);
         model.addAttribute("randomBooks",randomBooks);
