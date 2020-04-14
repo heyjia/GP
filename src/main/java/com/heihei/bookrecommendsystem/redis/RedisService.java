@@ -97,4 +97,19 @@ public class RedisService {
         JedisPool jedisPool = new JedisPool(jedisPoolConfig,redisConfig.getHost(),redisConfig.getPort(),redisConfig.getTimeout() * 1000,redisConfig.getPassword(),0);
         return jedisPool;
     }
+
+    public boolean del(BaseKeyPerfix baseKeyPerfix, String key) {
+        Jedis jedis = null;
+        try{
+            jedis = jedisPool.getResource();
+            String realKey = baseKeyPerfix.getPerfix() + key;
+            Long del = jedis.del(realKey);
+            if (del <= 0) {
+                return false;
+            }
+            return true;
+        }finally {
+            jedis.close();
+        }
+    }
 }

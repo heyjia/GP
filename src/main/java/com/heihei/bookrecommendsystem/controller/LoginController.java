@@ -14,11 +14,6 @@ import com.heihei.bookrecommendsystem.service.UserService;
 import com.heihei.bookrecommendsystem.util.EmailUtil;
 import com.heihei.bookrecommendsystem.util.RSAUtil;
 import com.heihei.bookrecommendsystem.util.UserCookieUtil;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +22,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -69,26 +62,21 @@ public class LoginController {
     @ResponseBody
     public Result<Boolean> doLogin(HttpServletRequest request, HttpServletResponse response, @RequestParam(name = "userId") String userId, @RequestParam(name = "password") String password){
         logger.info("进入doLogin");
-        logger.info(RSAUtil.PRIVATE_KEY);
-        password = RSAUtil.decrypt(password,RSAUtil.PRIVATE_KEY);
-        logger.info("表单密码解密后的结果：" + password);
-        UsernamePasswordToken token = new UsernamePasswordToken(userId,password);    //将用户账号包装成一个token
-        Subject subject = SecurityUtils.getSubject();
-        try {
-            subject.login(token);                                                     //执行登录请求，会被shiro过滤器拦截，对用户信息进行认证
-        }catch (IncorrectCredentialsException ice){
-            return  Result.error(CodeMsg.PASSWORD_ERROR);
-        }catch (UnknownAccountException uae){
+        UserDO userDO = userService.getOneUserByUserId(userId);       //根据用户名查询用户，判断其是否存在
+        if(userDO == null) {
             return  Result.error(CodeMsg.UNKNOW_ACCOUNT);
-        }catch (Exception e) {
-            //其他错误登录异常
-            return Result.error(new CodeMsg(10003,e.getMessage()));
         }
-        if (subject.isAuthenticated()) {
-            UserDO user = userService.getOneUserByUserId(userId);
-            userCookieUtil.addCookie(response,user,"");
-            logger.info("登录成功");
+        logger.info("用户信息:" + userDO.toString());
+        logger.info(RSAUtil.PRIVATE_KEY);
+        String inputPassword = RSAUtil.decrypt(password,RSAUtil.PRIVATE_KEY);
+        //判断密码是否正确，并且将用户放入session缓存
+        String userPpassword = RSAUtil.decrypt(userDO.getPassword(),RSAUtil.PRIVATE_KEY);
+        logger.info("表单密码解密后的结果：" + password);
+        if (!userPpassword.equals(inputPassword)) {
+            return  Result.error(CodeMsg.PASSWORD_ERROR);
         }
+        userCookieUtil.addCookie(response,userDO,"");
+        logger.info("登录成功");
         return Result.success(true);
     }
 
@@ -200,9 +188,9 @@ public class LoginController {
         return Result.success(true);
     }
     @RequestMapping("/toLogout")
-    public String toLogout() {
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
+    public String toLogout(HttpServletResponse response,HttpServletRequest request) {
+        //删除cookie
+        userCookieUtil.removeCookie(request,response);
         return "login";
     }
 }
