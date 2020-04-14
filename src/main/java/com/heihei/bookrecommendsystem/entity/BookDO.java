@@ -39,14 +39,12 @@ public class BookDO {
 
     private Integer classifyMainId;
 
-    private Integer reviewCount;
-
-    private String back;
+    private Integer rateCount;
 
     public BookDO() {
     }
 
-    public BookDO(Integer id, String ISBN, String name, String author, String translator, String category, String publishHourse, String provider, Integer wordsCount, String imgAddr, String infoAddr, String scoreAddr, String bookInfo, Double avgRatingVal, Integer classifyMainId, Integer reviewCount, String back) {
+    public BookDO(Integer id, String ISBN, String name, String author, String translator, String category, String publishHourse, String provider, Integer wordsCount, String imgAddr, String infoAddr, String scoreAddr, String bookInfo, Double avgRatingVal, Integer classifyMainId, Integer rateCount) {
         this.id = id;
         this.ISBN = ISBN;
         this.name = name;
@@ -62,8 +60,7 @@ public class BookDO {
         this.bookInfo = bookInfo;
         this.avgRatingVal = avgRatingVal;
         this.classifyMainId = classifyMainId;
-        this.reviewCount = reviewCount;
-        this.back = back;
+        this.rateCount = rateCount;
     }
 
     public Integer getId() {
@@ -186,20 +183,12 @@ public class BookDO {
         this.classifyMainId = classifyMainId;
     }
 
-    public Integer getReviewCount() {
-        return reviewCount;
+    public Integer getRateCount() {
+        return rateCount;
     }
 
-    public void setReviewCount(Integer reviewCount) {
-        this.reviewCount = reviewCount;
-    }
-
-    public String getBack() {
-        return back;
-    }
-
-    public void setBack(String back) {
-        this.back = back;
+    public void setRateCount(Integer rateCount) {
+        this.rateCount = rateCount;
     }
 
     @Override
@@ -220,8 +209,7 @@ public class BookDO {
                 ", bookInfo='" + bookInfo + '\'' +
                 ", avgRatingVal=" + avgRatingVal +
                 ", classifyMainId=" + classifyMainId +
-                ", reviewCount=" + reviewCount +
-                ", back='" + back + '\'' +
+                ", rateCount=" + rateCount +
                 '}';
     }
 }

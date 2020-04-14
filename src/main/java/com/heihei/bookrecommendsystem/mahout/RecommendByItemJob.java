@@ -27,9 +27,9 @@ public class RecommendByItemJob {
 
     public static void timerJob() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR,21);
-        calendar.set(Calendar.MINUTE,40);
-        calendar.set(Calendar.SECOND,50);
+        calendar.set(Calendar.HOUR,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
         Date time = calendar.getTime();
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {

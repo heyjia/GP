@@ -48,12 +48,12 @@
                             <input id="bookId" name = "bookId" type="hidden" th:value="${book.id}"/>
                             <p th:text = "'作者:' +${book.author}"></p>
                             <p th:text = "'类别:' + ${book.category}"></p>
-                            <p th:if="${book.publishHourse} ne 'null'" th:text = "'出版社:' + ${book.publishHourse}"></p>
-                            <p th:if="${book.publishHourse} eq 'null'" th:text = "'出版社:暂无'"></p>
+                            <p th:if="${book.publishHourse} != null" th:text = "'出版社:' + ${book.publishHourse}"></p>
+                            <p th:if="${book.publishHourse} == null" th:text = "'出版社:暂无'"></p>
                             <p th:text = "'提供方:' + ${book.provider}"></p>
                             <p th:text = "'字数:约' + ${book.wordsCount} + '字'"></p>
-                            <p th:if="${book.ISBN} ne 'null'" th:text = "'ISBN:' + ${book.ISBN}"></p>
-                            <p th:if="${book.ISBN} eq 'null'" th:text = "'ISBN:暂无' "></p>
+                            <p th:if="${book.ISBN} != null" th:text = "'ISBN:' + ${book.ISBN}"></p>
+                            <p th:if="${book.ISBN} == null" th:text = "'ISBN:暂无' "></p>
                             <p th:text = "'分类:' + ${book.className}"></p>
                         </div>
                     </div>

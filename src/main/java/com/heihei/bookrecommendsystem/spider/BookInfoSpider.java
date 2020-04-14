@@ -131,8 +131,8 @@ public class BookInfoSpider implements Runnable{
                 System.out.println(book.toString());
                 conn = DBConnectionUtil.getConn();
                 //插入数据库
-                String sql = "INSERT INTO book(ISBN,`name`,author,translator,category,publish_hourse,provider,words_count,img_addr,info_addr,score_addr,book_info,avg_rating_val,classify_main_id,review_count,back)"+
-                "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                String sql = "INSERT INTO book(ISBN,`name`,author,translator,category,publish_hourse,provider,words_count,img_addr,info_addr,score_addr,book_info,avg_rating_val,classify_main_id,rate_count)"+
+                "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
                 PreparedStatement preparedStatement = conn.prepareStatement(sql);
                 preparedStatement.setString(1,book.getISBN());
                 preparedStatement.setString(2,book.getName());
@@ -149,7 +149,6 @@ public class BookInfoSpider implements Runnable{
                 preparedStatement.setDouble(13,0.0);
                 preparedStatement.setInt(14,book.getClassifyMainId());
                 preparedStatement.setInt(15,0);
-                preparedStatement.setString(16,book.getBack());
                 preparedStatement.executeUpdate();
                 System.out.println("爬取图书成功：" + book.toString());
             }catch (SQLException e) {
