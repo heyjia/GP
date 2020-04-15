@@ -26,7 +26,7 @@
     <div th:include="include/head::nav">
     </div>
     <ol class = "breadcrumb">
-        <li><a href = "http://localhost:8080/login/toIndex">主页</a></li>
+        <li><a href = "/login/toIndex">主页</a></li>
         <li><a href = "#" th:text="${class.name}" th:href="'/book/searchBook?selKey=' + ${class.name} + '&page=1&limit=5&searchType=class'"></a></li>
     </ol>
     <div class = "panel panel-default">

@@ -93,7 +93,7 @@
                 <div class = "panel-body">
                     <p th:if="${#lists.isEmpty(favoriteBookList)}">
                         用户暂未设置偏好，请前往
-                        <a href="http://localhost:8080/person/toCenter">个人中心</a>设置用户偏好</p>
+                        <a href="/person/toCenter">个人中心</a>设置用户偏好</p>
                     <div th:each="recommendBook:${favoriteBookList}" th:if="${not #lists.isEmpty(favoriteBookList)}">
                         <div class="col-md-3" style="width: 20%;" id="recommendBookDiv2">
                             <div class="panel panel-default">

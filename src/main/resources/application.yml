@@ -14,7 +14,7 @@ spring:
       content-type: text/html
 
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/gp?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false
+    url: jdbc:mysql://129.204.166.67:3306/gp?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver

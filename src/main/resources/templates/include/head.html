@@ -18,7 +18,7 @@
     <div class="col-md-12 column">
         <nav class="navbar navbar-default" role="navigation">
             <div class="navbar-header">
-                <a class="navbar-brand" href="http://localhost:8080/login/toIndex"><span
+                <a class="navbar-brand" href="/login/toIndex"><span
                         class="glyphicon glyphicon-home"></span> ZBOOK</a>
             </div>
             <input id = "uId" name = "uId" th:value="${u.id}" type="hidden"/>
@@ -40,9 +40,9 @@
                     <li>
                         <a id = "userName" name = "userName" th:text="${u.name}"></a>
                     </li>
-                    <li><a href="http://localhost:8080/person/toCenter">个人中心</a></li>
+                    <li><a href="/person/toCenter">个人中心</a></li>
                     <li>
-                        <a href="http://localhost:8080/login/toLogout">注销</a>
+                        <a href="/login/toLogout">注销</a>
                     </li>
                 </ul>
             </div>
