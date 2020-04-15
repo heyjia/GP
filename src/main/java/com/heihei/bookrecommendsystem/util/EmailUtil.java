@@ -8,7 +8,7 @@ public class EmailUtil {
     private static final String CHARSET_UTF8 = "UTF-8";
     private static final String EMAIL_FROM = "heihei_007@126.com";
     private static final String USERNAME = "图书推荐系统";
-    private static final String AUTHENTICATION = "chen654321";
+    private static final String AUTHENTICATION = "WIANTQOMWFMJVXIF";
     private static final String EMAIL_SUBJECT = "注册验证码";
     public static void sendCheckCode(String emailAddress,String code) throws EmailException {
         String msg = "尊敬的用户：\n" +
@@ -26,5 +26,9 @@ public class EmailUtil {
         email.setSubject(subject);
         email.setMsg(content);
         email.send();
+    }
+
+    public static void main(String[] args) throws EmailException {
+        sendCheckCode("314460226@qq.com","123");
     }
 }

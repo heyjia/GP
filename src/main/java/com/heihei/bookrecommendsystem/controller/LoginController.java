@@ -126,7 +126,7 @@ public class LoginController {
     //注册
     @RequestMapping(value = "/register")
     @ResponseBody
-    public Result<Boolean> register(UserForm userForm) {
+    public Result<Boolean> register(UserForm userForm,HttpServletResponse response) {
         String userId = userForm.getUserId();
         UserDO user = userService.getOneUserByUserId(userId);
         if (user != null) {
@@ -153,6 +153,12 @@ public class LoginController {
         boolean result = userService.addUserByForm(userForm);
         if (result == false) {
             Result.error(CodeMsg.REGISTER_ERROR);
+        }
+        UserDO u = userService.getOneUserByUserId(userId);
+        if (u == null) {
+            Result.error(CodeMsg.REGISTER_ERROR);
+        }else{
+            userCookieUtil.addCookie(response,u,"");
         }
         return Result.success(true);
     }
