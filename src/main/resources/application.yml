@@ -20,6 +20,12 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
 
+  rabbitmq:
+    host: 129.204.166.67
+    port: 5672
+    username: admin
+    password: admin
+
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

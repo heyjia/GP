@@ -6,6 +6,7 @@ import com.heihei.bookrecommendsystem.entity.EmailDO;
 import com.heihei.bookrecommendsystem.entity.UserDO;
 import com.heihei.bookrecommendsystem.entity.form.EmailForm;
 import com.heihei.bookrecommendsystem.entity.form.UserForm;
+import com.heihei.bookrecommendsystem.rabbitmq.RabbitMQConfig;
 import com.heihei.bookrecommendsystem.result.CodeMsg;
 import com.heihei.bookrecommendsystem.result.Result;
 import com.heihei.bookrecommendsystem.service.BookService;
@@ -16,6 +17,7 @@ import com.heihei.bookrecommendsystem.util.RSAUtil;
 import com.heihei.bookrecommendsystem.util.UserCookieUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +32,7 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/login")
 public class LoginController {
-    private static long  GET_CODE_TIME_OUT = 300000;
+    private static long  GET_CODE_TIME_OUT = 100000;
     private static long  CODE_TIME_OUT = 1800000;
     Logger logger = LoggerFactory.getLogger(LoginController.class);
 
@@ -45,6 +47,9 @@ public class LoginController {
 
     @Autowired
     BookService bookService;
+
+    @Autowired
+    AmqpTemplate amqpTemplate;
     //前往登录页面
     @RequestMapping(value = "/toLogin")
     public String toLogin() {
@@ -187,7 +192,9 @@ public class LoginController {
             emailService.insertCode(emailForm.getUserId(),emailForm.getEmail(),code);
         }
         try{
-            EmailUtil.sendCheckCode(emailForm.getEmail(),code);
+            String msg = emailForm.getEmail() + ":" + code;
+            amqpTemplate.convertAndSend(RabbitMQConfig.MAIL_QUEUE_NAME,msg);
+            //EmailUtil.sendCheckCode(emailForm.getEmail(),code);
         }catch (Exception e) {
             Result.error(CodeMsg.SEND_EMAIL_ERROR);
         }

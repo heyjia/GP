@@ -161,8 +161,11 @@ public class RecommendByUserJob {
 
     private static void userEuclidean(DataModel dataModel,SimilarityEnum similarityType,NeighborHoodEnum neighborHoodType) throws TasteException {
         System.out.println("userEuclidean：基于用户的协同过滤算法，相似度算法为：" + similarityType.toString() + " 近邻算法为：" + neighborHoodType.toString());
+        //获取用户相似度
         UserSimilarity userSimilarity = MahoutFactory.userSimilarity(similarityType,dataModel);
+        //获取用户邻居
         UserNeighborhood userNeighborhood = MahoutFactory.userNeighborhood(neighborHoodType,userSimilarity,dataModel,NEIGHBORHOOD_NUM);
+        //推荐器
         RecommenderBuilder recommenderBuilder = MahoutFactory.userRecommender(userSimilarity,userNeighborhood,true);
         // 用70%的数据用作训练，剩下的30%用来测试
         MahoutFactory.evaluate(EvaluatorEnum.AVERAGE_ABSOLUTE_DIFFERENCE,recommenderBuilder,null,dataModel,0.7);

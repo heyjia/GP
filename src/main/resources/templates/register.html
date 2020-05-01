@@ -131,8 +131,8 @@
             },
             success:function (data) {
                 if (data.code == 0) {
-                    layer.alert("发送邮件成功");
-                    $("#getCheckCode").attr("disabled", true);
+                    countDown();
+                    //$("#getCheckCode").attr("disabled", true);
                 }else{
                     layer.alert(data.msg);
                 }
@@ -141,6 +141,25 @@
                 layer.alert("登陆失败,客户端请求有误");
             }
         });
+    }
+    var sec = 100;
+    function countDown(){
+        var timeout;
+        if (sec > 0) {
+            $("#getCheckCode").attr("disabled", true);
+            timeout = setTimeout(function () {
+                sec = sec - 1;
+                $("#getCheckCode").val("已发送验证码(" + sec + ")");
+                countDown();
+            },1000);
+        }else{
+            sec = 100;
+            $("#getCheckCode").val("再次获取验证码");
+            $("#getCheckCode").attr("disabled", false);
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+        }
     }
     $(function(){
         $("#registerForm").bootstrapValidator({
