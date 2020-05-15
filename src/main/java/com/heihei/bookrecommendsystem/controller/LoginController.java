@@ -2,17 +2,16 @@ package com.heihei.bookrecommendsystem.controller;
 
 import com.heihei.bookrecommendsystem.entity.BookClassDO;
 import com.heihei.bookrecommendsystem.entity.BookDO;
-import com.heihei.bookrecommendsystem.entity.EmailDO;
 import com.heihei.bookrecommendsystem.entity.UserDO;
 import com.heihei.bookrecommendsystem.entity.form.EmailForm;
 import com.heihei.bookrecommendsystem.entity.form.UserForm;
 import com.heihei.bookrecommendsystem.rabbitmq.RabbitMQConfig;
+import com.heihei.bookrecommendsystem.redis.MailKeyPerfix;
+import com.heihei.bookrecommendsystem.redis.RedisService;
 import com.heihei.bookrecommendsystem.result.CodeMsg;
 import com.heihei.bookrecommendsystem.result.Result;
 import com.heihei.bookrecommendsystem.service.BookService;
-import com.heihei.bookrecommendsystem.service.EmailService;
 import com.heihei.bookrecommendsystem.service.UserService;
-import com.heihei.bookrecommendsystem.util.EmailUtil;
 import com.heihei.bookrecommendsystem.util.RSAUtil;
 import com.heihei.bookrecommendsystem.util.UserCookieUtil;
 import org.slf4j.Logger;
@@ -26,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -42,14 +40,16 @@ public class LoginController {
     @Autowired
     UserCookieUtil userCookieUtil;
 
-    @Autowired
-    EmailService emailService;
+
 
     @Autowired
     BookService bookService;
 
     @Autowired
     AmqpTemplate amqpTemplate;
+
+    @Autowired
+    RedisService redisService;
     //前往登录页面
     @RequestMapping(value = "/toLogin")
     public String toLogin() {
@@ -141,19 +141,26 @@ public class LoginController {
         if (user != null) {
             return Result.error(CodeMsg.EMAIL_EXISTED);
         }
-        EmailDO emailDO = emailService.getEmailByAddress(userForm.getEmail(),userForm.getUserId());
-        if (emailDO == null) {
-            return Result.error(CodeMsg.WITHOUT_CHECK_CODE);
-        }else{
-            Date now = new Date();
-            Date lastUpdtTime = emailDO.getUpdtTime();
-            long diff = now.getTime() - lastUpdtTime.getTime();
-            if (diff > CODE_TIME_OUT) {
-                return Result.error(CodeMsg.CHECK_CODE_TIME_OUT);
-            }
-            if (!emailDO.getCode().equals(userForm.getCheckCode())) {
+        String codeRedis = redisService.get(MailKeyPerfix.mailKeyPerfix,userForm.getEmail(),String.class);
+        if (codeRedis == null || "".equals(codeRedis)) {
+            return Result.error(CodeMsg.CHECK_CODE_TIME_OUT);
+        }
+        //EmailDO emailDO = emailService.getEmailByAddress(userForm.getEmail(),userForm.getUserId());
+       // if (emailDO == null) {
+       //     return Result.error(CodeMsg.WITHOUT_CHECK_CODE);
+//        }else{
+//            Date now = new Date();
+//            Date lastUpdtTime = emailDO.getUpdtTime();
+//            long diff = now.getTime() - lastUpdtTime.getTime();
+//            if (diff > CODE_TIME_OUT) {
+//                return Result.error(CodeMsg.CHECK_CODE_TIME_OUT);
+//            }
+//            if (!emailDO.getCode().equals(userForm.getCheckCode())) {
+//                return Result.error(CodeMsg.CHECK_CODE_ERROR);
+//            }
+//        }
+        if (!codeRedis.equals(userForm.getCheckCode())) {
                 return Result.error(CodeMsg.CHECK_CODE_ERROR);
-            }
         }
         boolean result = userService.addUserByForm(userForm);
         if (result == false) {
@@ -172,25 +179,39 @@ public class LoginController {
     @ResponseBody
     @RequestMapping(value = "email")
     public Result<Boolean>  getEmail(EmailForm emailForm) {
+        //判断邮箱是否注册
+        UserDO user = userService.getOneUserByEmail(emailForm.getEmail());
+        //如果用户存在
+        if (user != null) {
+            return Result.error(CodeMsg.EMAIL_EXISTED);
+        }
+        //从数据库查找验证码
+        String codeRedis = redisService.get(MailKeyPerfix.mailKeyPerfix,emailForm.getEmail(),String.class);
+        if (codeRedis != null && !"".equals(codeRedis) && codeRedis.length() != 0) {
+            return Result.error(CodeMsg.EMAIL_TOO_FAST);
+        }
+        //随机生成验证码
         int random = (int)((Math.random() * 9 + 1) * 100000);
         String code = random + "";
         logger.info("随机生成的验证码为："+ code);
-        EmailDO emailDO = emailService.getEmailByAddress(emailForm.getEmail(),emailForm.getUserId());
-        if (emailDO != null) {
-            Date now = new Date();
-            Date lastUpdtTime = emailDO.getUpdtTime();
-            long diff = now.getTime() - lastUpdtTime.getTime();//这样得到的差值是微秒级别
-            logger.info("时间差diff: " + diff);
-            if (diff < GET_CODE_TIME_OUT){
-                return Result.error(CodeMsg.EMAIL_TOO_FAST);
-            }else{
-                emailDO.setUpdtTime(new Date());
-                emailDO.setCode(code);
-                emailService.updateOne(emailDO);
-            }
-        }else{
-            emailService.insertCode(emailForm.getUserId(),emailForm.getEmail(),code);
-        }
+        //插入Redis
+        redisService.set(MailKeyPerfix.mailKeyPerfix,emailForm.getEmail(),code);
+//        EmailDO emailDO = emailService.getEmailByAddress(emailForm.getEmail(),emailForm.getUserId());
+//        if (emailDO != null) {
+//            Date now = new Date();
+//            Date lastUpdtTime = emailDO.getUpdtTime();
+//            long diff = now.getTime() - lastUpdtTime.getTime();//这样得到的差值是微秒级别
+//            logger.info("时间差diff: " + diff);
+//            if (diff < GET_CODE_TIME_OUT){
+//                return Result.error(CodeMsg.EMAIL_TOO_FAST);
+//            }else{
+//                emailDO.setUpdtTime(new Date());
+//                emailDO.setCode(code);
+//                emailService.updateOne(emailDO);
+//            }
+//        }else{
+//            emailService.insertCode(emailForm.getUserId(),emailForm.getEmail(),code);
+//        }
         try{
             String msg = emailForm.getEmail() + ":" + code;
             amqpTemplate.convertAndSend(RabbitMQConfig.MAIL_QUEUE_NAME,msg);

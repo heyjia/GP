@@ -20,7 +20,7 @@ public class CodeMsg {
     public static CodeMsg SEND_EMAIL_ERROR = new CodeMsg(10007,"发送邮件失败");
     public static CodeMsg EMAIL_TOO_FAST = new CodeMsg(10008,"请勿频繁点击，登录邮箱查看验证码");
     public static CodeMsg WITHOUT_CHECK_CODE = new CodeMsg(10009,"请获取邮箱验证码");
-    public static CodeMsg CHECK_CODE_TIME_OUT = new CodeMsg(10010,"邮箱验证码已过期，请重新获取");
+    public static CodeMsg CHECK_CODE_TIME_OUT = new CodeMsg(10010,"邮箱验证码失效，请重新获取");
     public static CodeMsg CHECK_CODE_ERROR = new CodeMsg(10011,"验证码错误，请重新输入");
     public static CodeMsg EMAIL_EXISTED = new CodeMsg(10012,"注册失败，邮箱已被注册");
     public static CodeMsg UPDATE_USER_ERROR = new CodeMsg(10013,"更新用户信息失败");
