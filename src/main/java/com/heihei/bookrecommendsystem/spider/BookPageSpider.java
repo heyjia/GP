@@ -134,7 +134,7 @@ public class BookPageSpider implements Runnable{
                     webClient.setAjaxController(new NicelyResynchronizingAjaxController());
                     webClient.getOptions().setActiveXNative(false);
                     webClient.getOptions().setTimeout(10*1000);
-                    HtmlPage page = webClient.getPage("https://read.douban.com/category?kind=100");
+                    HtmlPage page = webClient.getPage(tempAddr);
                     webClient.waitForBackgroundJavaScript(20*1000*1000);
                     String pageAsXml = page.asXml();
                     System.out.println(pageAsXml);
