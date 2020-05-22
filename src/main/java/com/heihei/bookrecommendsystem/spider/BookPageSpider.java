@@ -1,6 +1,10 @@
 package com.heihei.bookrecommendsystem.spider;
 
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -120,7 +124,21 @@ public class BookPageSpider implements Runnable{
                 tempAddr += "&page=" + i;
                 System.out.println("查找页面地址为：" + tempAddr);
                 try {
-                    initDoc(tempAddr);
+                    WebClient webClient = new WebClient(BrowserVersion.FIREFOX_68);
+                    webClient.setJavaScriptErrorListener(new MyJSErrorListener());
+                    webClient.getOptions().setUseInsecureSSL(true);
+                    webClient.getOptions().setJavaScriptEnabled(true);
+                    webClient.getOptions().setCssEnabled(false);
+                    webClient.getOptions().setThrowExceptionOnScriptError(false);
+                    webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
+                    webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+                    webClient.getOptions().setActiveXNative(false);
+                    webClient.getOptions().setTimeout(10*1000);
+                    HtmlPage page = webClient.getPage("https://read.douban.com/category?kind=100");
+                    webClient.waitForBackgroundJavaScript(20*1000*1000);
+                    String pageAsXml = page.asXml();
+                    System.out.println(pageAsXml);
+                    doc = Jsoup.parse(pageAsXml);
                     Elements elementH4 = doc.select("h4");
                     for (Element element : elementH4) {
                         String href = element.select("a").attr("href");
